@@ -1,0 +1,16 @@
+<div class="log-page">
+    <p-panel header="Log Filter" toggleable="false">
+        <app-log-filter
+            [logFilter$]="logFilterService.filter$"
+            [logColumns$]="logService.logColumns$"
+            (handleSubmit)="handleSubmitFilter($event)"
+        />
+    </p-panel>
+    <app-log-table
+        [$logDataUpdate]="logService.logs$"
+        [$logColumns]="columnsOfTable"
+        (handleLazyLoad)="handleLazyLoad($event)"
+        (handleSetProcInId)="handleSetProcInId($event)"
+        (handleSetRequestId)="handleSetRequestId($event)"
+    />
+</div>

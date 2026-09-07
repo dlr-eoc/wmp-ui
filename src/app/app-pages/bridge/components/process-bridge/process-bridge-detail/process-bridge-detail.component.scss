@@ -1,0 +1,17 @@
+.detail-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+}
+.selected-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.toggle-bridge {
+    display: flex;
+    flex: 1;
+    gap: 1rem;
+    align-items: center;
+}

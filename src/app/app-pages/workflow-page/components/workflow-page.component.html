@@ -1,0 +1,54 @@
+<div class="workflow-page">
+    <div class="diagram-section">
+        <!--        <p-splitter-->
+        <!--            layout="horizontal"-->
+        <!--            [style]="{height: '100%', width: '100%', display: 'flex'}"-->
+        <!--            [panelSizes]="[75, 25]"-->
+        <!--            [minSizes]="[25, 15]"-->
+        <!--        >-->
+        <!--            <div [style]="{height: '100%', width: '100%', display: 'flex'}">-->
+        <!--                <ng-template #panel>-->
+        <div class="bpmn-diagram">
+            @if ((filter?.processInstanceId || filter?.processDefinition?.id) && bpmnManager) {
+                <app-bpmn-diagram-container [bpmnManager]="bpmnManager" />
+            } @else {
+                <div class="bpmn-placeholder">
+                    <img src="/assets/bpmn-placeholder.svg" alt="bpmn-placeholder" />
+                </div>
+            }
+        </div>
+        <!--                </ng-template>-->
+        <!--                <ng-template #panel>-->
+        @if (filter?.processInstanceId) {
+            <div class="bpmn-detail">
+                <app-process-instance-detail
+                    [reloadPageAfterButtonClick]="onRefresh"
+                    [dataUpdateRunning]="loading"
+                />
+            </div>
+        }
+        <!--                </ng-template>-->
+        <!--            </div>-->
+        <!--        </p-splitter>-->
+    </div>
+    <div
+        style="
+            display: flex;
+            gap: 1rem;
+            flex-direction: column;
+            overflow: auto;
+            flex-grow: 1;
+            margin-top: 1rem;
+        "
+    >
+        <!--    <app-workflow-filter-bar />-->
+
+        <app-workflow-filter />
+        @if (filter?.processInstanceId) {
+            <app-process-instance-data />
+        } @else {
+            <app-workflow-action-bar />
+            <app-workflow-table />
+        }
+    </div>
+</div>

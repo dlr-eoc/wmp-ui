@@ -1,0 +1,84 @@
+<!--    [class.full-height]="showProcessDefinitionMenu || selectedProcessDefinitionKey === undefined"-->
+<div class="select-panel">
+    <p-panel header="Process definition selection">
+        <div class="process-definition-selection">
+            <p-auto-complete
+                [(ngModel)]="selectedProcessDefinitionKey"
+                [dropdown]="true"
+                [suggestions]="suggestionsProcessDefinitionKeys"
+                (onSelect)="this.onProcessDefinitionKeyChanged($event)"
+                (completeMethod)="this.handleProcessDefinitionAutocomplete($event)"
+                (onClear)="this.handleClearProcessDefinition()"
+                placeholder="Select a process definition"
+                [style]="{flex: 1}"
+                class="processDefinitionSelectionAutoComplete"
+            >
+                <ng-template let-key #item>
+                    <div class="definition-item">
+                        <span [pTooltip]="key">
+                            {{ key | slice: 0 : 84 }}
+                            @if (key.length > 84) {
+                                ...
+                            }
+                        </span>
+                        @if (currentIncidents.definitionIncidents[key]) {
+                            <p-badge
+                                [value]="currentIncidents.definitionIncidents[key]"
+                                severity="danger"
+                                pTooltip="Incidents: {{ currentIncidents.definitionIncidents[key] }}"
+                            />
+                        }
+                    </div>
+                </ng-template>
+            </p-auto-complete>
+            @if (selectedProcessDefinitionKey !== "" && selectedProcessDefinition !== undefined) {
+                <p-auto-complete
+                    [(ngModel)]="selectedProcessDefinition"
+                    [dropdown]="true"
+                    [suggestions]="this.filteredProcessDefinitionSuggestions"
+                    (onSelect)="this.onProcessDefinitionChanged($event)"
+                    (completeMethod)="this.handleVersionAutocomplete($event)"
+                    optionLabel="version"
+                    placeholder="Select a version"
+                    [style]="{flex: 1}"
+                    class="versionSelectionAutoComplete"
+                >
+                    <ng-template let-processDefinitionItem #item>
+                        <div class="definition-item">
+                            <span>{{ processDefinitionItem.version }}</span>
+                            <!--                            <span class="text-sm text-surface-500 dark:text-surface-400">{{ key }}</span>-->
+                            @if (currentIncidents.versionIncidents[processDefinitionItem.version]) {
+                                <p-badge
+                                    [value]="currentIncidents.versionIncidents[processDefinitionItem.version]"
+                                    severity="danger"
+                                    pTooltip="Incidents: {{
+                                        currentIncidents.versionIncidents[processDefinitionItem.version]
+                                    }}"
+                                />
+                            }
+                        </div>
+                    </ng-template>
+                </p-auto-complete>
+                @if (
+                    selectedProcessDefinition &&
+                    selectedProcessDefinition.version &&
+                    currentIncidents.versionIncidents[selectedProcessDefinition.version]
+                ) {
+                    <p-button
+                        pTooltip="Clear selection"
+                        icon="pi pi-times"
+                        (onClick)="this.handleClearProcessDefinition()"
+                    />
+                    <p-divider layout="vertical" />
+                    Incidents:
+                    <p-badge
+                        [value]="currentIncidents.versionIncidents[selectedProcessDefinition.version]"
+                        severity="danger"
+                    />
+                } @else {
+                    Incidents: 0
+                }
+            }
+        </div>
+    </p-panel>
+</div>

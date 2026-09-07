@@ -1,0 +1,31 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false">
+    <h3 class="modal-title">Manage groups for user {{ data.userId }}</h3>
+    <div class="modal-body">
+        <clr-alert [(clrAlertClosed)]="alertClosed" clrAlertType="danger">
+            <clr-alert-item>
+                <span class="alert-text">{{ alertText }}</span>
+            </clr-alert-item>
+        </clr-alert>
+        <p>Update group memberships by checking the checkboxes:</p>
+        <clr-checkbox-container>
+            @for (group of data.groups; track group) {
+                <clr-checkbox-wrapper>
+                    <input
+                        type="checkbox"
+                        clrCheckbox
+                        [checked]="group.value"
+                        [name]="group.id"
+                        (change)="onChange($event)"
+                    />
+                    <label class="bold">{{ group.id }}</label>
+                </clr-checkbox-wrapper>
+            }
+        </clr-checkbox-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="open = false; openChange.emit(false)">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-warning" (click)="onSubmit()">Update</button>
+    </div>
+</clr-modal>

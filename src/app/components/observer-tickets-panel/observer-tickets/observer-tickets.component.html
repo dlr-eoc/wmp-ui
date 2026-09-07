@@ -1,0 +1,27 @@
+@if ($filteredTasks()) {
+    <div class="observer-tickets">
+        <div style="display: flex; align-items: center; gap: 0.4rem">
+            <p-button icon="pi pi-refresh" (onClick)="this.refreshFilter()"></p-button>
+            <h3 style="margin: 0">Open Tickets ({{ $filteredTasks().length }}):</h3>
+        </div>
+
+        <div style="flex: 1; margin-top: 1rem">
+            <app-tickets [data]="$filteredTasks()" [informationTemplate]="info">
+                <ng-template #info let-element="element">
+                    <p-card
+                        [class]="
+                            this.$selectedTask()?.processInstanceId === element?.processInstanceId
+                                ? 'selected-task'
+                                : 'task'
+                        "
+                        (click)="handleTicketSelection(element)"
+                    >
+                        <div>Name: {{ element.name }}</div>
+                        <div>Created: {{ element?.created }}</div>
+                        <div>InstanceId: {{ element?.processInstanceId }}</div>
+                    </p-card>
+                </ng-template>
+            </app-tickets>
+        </div>
+    </div>
+}

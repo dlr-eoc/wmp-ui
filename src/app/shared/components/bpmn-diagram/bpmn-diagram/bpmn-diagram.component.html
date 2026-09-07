@@ -1,0 +1,6 @@
+<!--<div #ref class="diagram-container"></div>-->
+
+@if (this.bpmnManager().bpmnHandler.bpmnDiagramService.loadingWorkflowData$ | async) {
+    <div class="diagram-loading-overlay"><p-progress-spinner /></div>
+}
+<div #ref class="diagram-container"></div>

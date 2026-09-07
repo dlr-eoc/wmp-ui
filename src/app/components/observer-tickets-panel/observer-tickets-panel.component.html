@@ -1,0 +1,29 @@
+<div style="display: flex">
+    <app-observer-tickets [bpmnManager]="$bpmnManagerTicketProcessInstance()" />
+
+    @if (
+        bpmnDiagramTicketHandlerService() &&
+        $bpmnManagerTicketProcessInstance() &&
+        $selectedTask() !== undefined
+    ) {
+        <p-divider [layout]="'vertical'" />
+        <div class="bpmn-diagram-container">
+            <app-observer-bpmn-resolve
+                [_$bpmnHandlerServiceProcessInstance]="bpmnDiagramTicketHandlerService()"
+            />
+            <div class="bpmn-diagram">
+                <app-bpmn-diagram-container [bpmnManager]="$bpmnManagerTicketProcessInstance()" />
+            </div>
+            <h4>Details:</h4>
+            <div>Activity: {{ _$filter()?.activity?.name }}</div>
+            <div>
+                More Details: {{ _$filter()?.processInstanceId }}
+                <app-workflow-filter-selection-group
+                    [$workFlowFilterElementSting]="_$filter()?.processInstanceId"
+                    [$workFlowFilterKey]="'processInstanceId'"
+                    [$shouldDisplayText]="false"
+                />
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,28 @@
+@use 'src/styles.scss' as globalStyle;
+
+.diagram-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 1rem;
+    margin: 1rem;
+    //height: 100%;
+}
+
+.diagram-and-detail {
+    display: flex;
+    gap: 1rem;
+}
+
+.bpmn-diagram {
+    @include globalStyle.bpmn-diagram-base-style();
+    flex: 7;
+}
+
+.bpmn-placeholder {
+    @include globalStyle.bpmn-diagram-placeholder-style();
+}
+
+.diagram-detail {
+    flex: 3;
+}

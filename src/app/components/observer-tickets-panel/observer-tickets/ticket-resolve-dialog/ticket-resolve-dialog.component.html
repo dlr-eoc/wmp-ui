@@ -1,0 +1,19 @@
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="visibleInput()"
+    [dialogAdditionalContent]="additionalDialogContent"
+    [title]="title()"
+    [description]="description()"
+    [labelConfirm]="labelConfirm()"
+    [flex]="true"
+    (clickedConfirm)="this.clickedConfirm.emit()"
+>
+    <ng-template #additionalDialogContent>
+        <br /><br />
+        <ul>
+            @for (incident of incidents(); track incident.id) {
+                <li style="margin-left: 0.4rem">{{ incident.activityId }} ({{ incident.createTime }})</li>
+            }
+        </ul>
+        <p>Retry the task with the latest incident occurred for a possible fix</p>
+    </ng-template>
+</app-confirm-cancel-dialog>

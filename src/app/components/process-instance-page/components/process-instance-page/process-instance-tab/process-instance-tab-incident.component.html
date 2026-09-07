@@ -1,0 +1,71 @@
+<clr-tab-content>
+    <clr-datagrid [clrDgLoading]="(incidentsLoading | async) ?? true">
+        <clr-dg-column [clrDgField]="'createTime'" [clrDgSortOrder]="defaultSortOrder">
+            Create Time
+        </clr-dg-column>
+        <clr-dg-column>Incident Type</clr-dg-column>
+        <clr-dg-column
+            >ActivityId
+            <clr-dg-string-filter [clrDgStringFilter]="incidentActivityIdFilter"></clr-dg-string-filter>
+        </clr-dg-column>
+        <clr-dg-column
+            >Message
+            <clr-dg-string-filter [clrDgStringFilter]="incidentMessageFilter"></clr-dg-string-filter>
+        </clr-dg-column>
+        <clr-dg-column>ErrorDetails</clr-dg-column>
+
+        <clr-dg-row
+            *clrDgItems="
+                let processInstanceIncident of (incidents | async) ?? []
+                    | IncidentsFilterActivity: activityName
+            "
+        >
+            <clr-dg-cell>
+                {{ processInstanceIncident.createTime }}
+            </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceIncident.incidentType }}</clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceIncident.activityId }}</clr-dg-cell>
+            <clr-dg-cell>
+                {{ processInstanceIncident.incidentMessage }}
+            </clr-dg-cell>
+            <clr-dg-cell>
+                @if (processInstanceIncident.errorDetails; as errorDetails) {
+                    <div (click)="$openDetails.set(true); $errorDetails.set(errorDetails)">(click)</div>
+                } @else {
+                    NONE
+                }
+            </clr-dg-cell>
+
+            @if (!!((stacktraceMap | async) ?? {})[processInstanceIncident.configuration || '']) {
+                <ng-container ngProjectAs="clr-dg-row-detail">
+                    <clr-dg-row-detail *clrIfExpanded>
+                        <div class="object-value-cell">
+                            {{ ((stacktraceMap | async) ?? {})[processInstanceIncident.configuration || ''] }}
+                        </div>
+                    </clr-dg-row-detail>
+                </ng-container>
+            }
+        </clr-dg-row>
+
+        <clr-dg-footer> {{ ((incidents | async) ?? []).length }} incidents </clr-dg-footer>
+    </clr-datagrid>
+    <app-confirm-cancel-dialog
+        title="Incident details"
+        [flex]="true"
+        [visibleInputSignal]="$openDetails"
+        [dialogAdditionalContent]="dialogAdditionalContent"
+    >
+        <ng-template #dialogAdditionalContent>
+            <div style="flex: 1; display: flex; gap: 1rem; padding: 2rem">
+                <p-button
+                    severity="secondary"
+                    icon="pi   pi-copy"
+                    pTooltip="Copy to clipboard"
+                    [cdkCopyToClipboard]="$errorDetails() ?? ''"
+                />
+                <br />
+                {{ $errorDetails() ?? 'NONE' }}
+            </div>
+        </ng-template>
+    </app-confirm-cancel-dialog>
+</clr-tab-content>

@@ -1,0 +1,95 @@
+<div class="content-container">
+    <div class="content-area">
+        <div class="login-wrapper">
+            <form class="login" [formGroup]="loginForm" (submit)="handleLogin()">
+                <section class="title">
+                    <h3 class="welcome">Welcome to</h3>
+                    WMP UI
+                </section>
+
+                <!-- basic authentication  -->
+                @if (isBasicAuth) {
+                    <div class="login-group">
+                        <clr-input-container>
+                            <label class="clr-sr-only">Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                clrInput
+                                placeholder="Username"
+                                formControlName="username"
+                            />
+                            <clr-control-error>This field is required!</clr-control-error>
+                        </clr-input-container>
+                        <clr-password-container>
+                            <label class="clr-sr-only">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                clrPassword
+                                placeholder="Password"
+                                formControlName="password"
+                            />
+                            <clr-control-error>This field is required!</clr-control-error>
+                        </clr-password-container>
+                        <div class="error active" [hidden]="!error">Invalid user name or password</div>
+                        <button type="submit" class="btn btn-primary" [disabled]="!loginForm.valid">
+                            <cds-icon shape="login"></cds-icon>
+                            LOG IN
+                        </button>
+                    </div>
+                }
+
+                <!-- kerberos authentication  -->
+                @if (isKerberosAuth && !isBasicAuth) {
+                    <div class="login-group">
+                        <span class="badge kerberos-user-label">
+                            <cds-icon shape="user"></cds-icon>
+                            &nbsp;{{ kerberosUsername }}
+                        </span>
+                        <button class="btn btn-primary" (click)="kerberosLogin()">
+                            <cds-icon shape="login"></cds-icon>
+                            LOG IN
+                        </button>
+                    </div>
+                }
+
+                <!-- kerberos authentication fallback, if not found windows ad-->
+                @if (!isKerberosAuth && !isBasicAuth) {
+                    <div class="login-group">
+                        <h3>{{ kerberosErrorMessage }}</h3>
+                    </div>
+                }
+
+                <!-- radio button for authentication variants   -->
+                <div class="clr-form-control authentication-selection">
+                    <label class="clr-control-label">Authentication</label>
+                    <div class="clr-control-container">
+                        <div class="clr-radio-wrapper">
+                            <input
+                                type="radio"
+                                id="vertical-radio1"
+                                name="radio-full"
+                                class="clr-radio"
+                                [checked]="isBasicAuth"
+                                (change)="setAuthTo('basic-auth')"
+                            />
+                            <label for="vertical-radio1" class="clr-control-label">Basic Auth</label>
+                        </div>
+                        <div class="clr-radio-wrapper">
+                            <input
+                                type="radio"
+                                id="vertical-radio2"
+                                name="radio-full"
+                                class="clr-radio"
+                                [checked]="isKerberosAuth"
+                                (change)="setAuthTo('kerberos')"
+                            />
+                            <label for="vertical-radio2" class="clr-control-label">Kerberos</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

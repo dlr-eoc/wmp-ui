@@ -1,0 +1,26 @@
+.log-filter {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 1rem;
+}
+.log-filter-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+#log-table-column-selection {
+    width: 20rem;
+}
+#processInstanceId_input {
+    width: 22rem;
+}
+#activityInstanceId_input {
+    width: 20rem;
+}
+#requestId_input {
+    width: 10rem;
+}

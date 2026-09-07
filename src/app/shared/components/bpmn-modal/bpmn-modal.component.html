@@ -1,0 +1,17 @@
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="visibleInput()"
+    [dialogAdditionalContent]="additionalDialogContent"
+    [title]="title()"
+    [description]="description()"
+    [labelConfirm]="labelConfirm()"
+    [flex]="true"
+    (clickedConfirm)="this.handleClicked()"
+    (onDialogHide)="this.handleHide()"
+    (onDialogShown)="this.handleDialogShown()"
+>
+    <ng-template #additionalDialogContent>
+        <div class="bpmn-diagram">
+            <app-bpmn-diagram-container [bpmnManager]="bpmnManager()" />
+        </div>
+    </ng-template>
+</app-confirm-cancel-dialog>

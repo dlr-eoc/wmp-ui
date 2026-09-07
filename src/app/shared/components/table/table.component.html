@@ -1,0 +1,73 @@
+<p-table
+    dataKey="id"
+    [paginator]="paginationEnabled()"
+    size="small"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    [showCurrentPageReport]="true"
+    [showGridlines]="true"
+    [value]="availableData()"
+    [(selection)]="selectedElementOrArrayOfElement"
+    [rows]="defaultRows()"
+    [rowsPerPageOptions]="[5, 10, 25, 50]"
+    [first]="first"
+    [totalRecords]="totalAvailableCount()"
+    [columns]="columnsOfTable"
+    [selectionMode]="selectionMode()"
+    [lazy]="lazyEnabled()"
+    [resizableColumns]="true"
+    columnResizeMode="expand"
+    [reorderableColumns]="true"
+    (selectionChange)="handleSelectionChange()"
+    (onLazyLoad)="handleLazyLoad($event)"
+    #tableReference
+>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            @if (selectionMode() && selectionMode() === "multiple") {
+                <th>
+                    <p-tableHeaderCheckbox />
+                </th>
+            }
+            @if (selectionMode() === undefined && menuHeaderEnabled()) {
+                <th></th>
+            }
+
+            @for (column of columns; track column.field) {
+                @if (column.isSortable) {
+                    <th pReorderableColumn pResizableColumn [pSortableColumn]="column.field">
+                        {{ column.header }}
+                        <p-sortIcon type="date" [field]="column.field" />
+                        @if (column.isFilterable) {
+                            <p-columnFilter [field]="column.field" display="menu" />
+                        }
+                    </th>
+                } @else {
+                    <th pReorderableColumn pResizableColumn>
+                        {{ column.header }}
+                        @if (column.isFilterable) {
+                            <p-columnFilter [field]="column.field" display="menu" />
+                        }
+                    </th>
+                }
+            }
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-entry let-columns="columns">
+        <ng-container
+            [ngTemplateOutlet]="columnTemplate() || defaultBodyTemplate"
+            [ngTemplateOutletContext]="{
+                entryOfTable: entry,
+                columnsOfTable: columns,
+                tableReference: tableReference,
+            }"
+        />
+    </ng-template>
+
+    <ng-template #defaultBodyTemplate let-entry>
+        <tr>
+            @for (singleEntry of entry; track singleEntry.id) {
+                <td>{{ entry }}</td>
+            }
+        </tr>
+    </ng-template>
+</p-table>

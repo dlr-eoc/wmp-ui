@@ -1,0 +1,146 @@
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="this.addModalOpen"
+    [dialogAdditionalContent]="additionalDialogContent"
+    title="Create new topic group"
+    [description]=""
+    labelConfirm="Create"
+    [flex]="false"
+    (clickedConfirm)="clickedConfirmAdd()"
+    (onDialogHide)="onModalClosed()"
+>
+    <ng-template #additionalDialogContent>
+        <form [formGroup]="form">
+            <!-- Topic group name -->
+            <div class="form-field">
+                <label for="name">
+                    <b><span>Topic group name</span></b>
+                    <span class="required">*</span>
+                </label>
+
+                <div class="field-content">
+                    <input
+                        id="name"
+                        placeholder="Topic group name"
+                        type="text"
+                        pInputText
+                        formControlName="name"
+                        [invalid]="form.controls['name'].invalid && form.controls['name'].touched"
+                        aria-describedby="name-error"
+                    />
+
+                    @if (form.controls['name'].invalid && form.controls['name'].touched) {
+                        <small id="name-error" class="error-message"> Name is required. </small>
+                    }
+                </div>
+            </div>
+
+            <!--  Number of workers  -->
+            <div class="form-field">
+                <label for="numWorkers">
+                    <b><span>Number of workers</span></b>
+                    <span class="required">*</span>
+                </label>
+
+                <div class="field-content">
+                    <p-inputNumber
+                        inputId="numWorkers"
+                        formControlName="numWorkers"
+                        placeholder="0"
+                        [showButtons]="true"
+                        buttonLayout="stacked"
+                        [min]="0"
+                        [step]="1"
+                        [invalid]="form.controls['numWorkers'].invalid && form.controls['numWorkers'].touched"
+                        aria-describedby="numWorkers-error"
+                    />
+
+                    @if (form.controls['numWorkers'].invalid && form.controls['numWorkers'].touched) {
+                        <small id="numWorkers-error" class="error-message">
+                            Number of workers is required.
+                        </small>
+                    }
+                </div>
+            </div>
+
+            <!--  Lock time duration  -->
+            <div class="form-field">
+                <label for="lockTimeDuration">
+                    <b> <span>Lock time duration</span> </b>
+                    <span class="required">*</span>
+                </label>
+
+                <div class="field-content">
+                    <input
+                        id="lockTimeDuration"
+                        type="text"
+                        pInputText
+                        formControlName="lockTimeDuration"
+                        placeholder="PT30S"
+                        [invalid]="
+                            form.controls['lockTimeDuration'].invalid &&
+                            form.controls['lockTimeDuration'].touched
+                        "
+                        aria-describedby="lockTimeDuration-error"
+                    />
+
+                    @if (
+                        form.controls['lockTimeDuration'].invalid && form.controls['lockTimeDuration'].touched
+                    ) {
+                        <small id="lockTimeDuration-error" class="error-message">
+                            Lock time duration is required.
+                        </small>
+                    }
+                </div>
+            </div>
+
+            <!-- retry cycle -->
+            <div class="form-field">
+                <label for="retryCycle">
+                    <b><span>Retry cycle</span></b>
+                    <span class="required">*</span>
+                </label>
+
+                <div class="field-content">
+                    <input
+                        id="name"
+                        type="text"
+                        placeholder="R3/PT5S"
+                        pInputText
+                        formControlName="retryCycle"
+                        [invalid]="form.controls['retryCycle'].invalid && form.controls['retryCycle'].touched"
+                        aria-describedby="retryCycle-error"
+                    />
+
+                    @if (form.controls['retryCycle'].invalid && form.controls['retryCycle'].touched) {
+                        <small id="retryCycle-error" class="error-message"> Retry cycle is required. </small>
+                    }
+                </div>
+            </div>
+
+            <!--  Execution -->
+            <div class="form-field">
+                <label for="execution">
+                    <b><span>Execution</span></b>
+                    <span class="required">*</span>
+                </label>
+
+                <div class="field-content">
+                    <p-select
+                        inputId="execution"
+                        formControlName="execution"
+                        [options]="addModalData().executions"
+                        placeholder="Select an execution"
+                        [fluid]="true"
+                        appendTo="body"
+                        [invalid]="form.controls['execution'].invalid && form.controls['execution'].touched"
+                        aria-describedby="execution-error"
+                    />
+
+                    @if (form.controls['execution'].invalid && form.controls['execution'].touched) {
+                        <small id="execution-error" class="error-message"> Execution is required. </small>
+                    }
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</app-confirm-cancel-dialog>

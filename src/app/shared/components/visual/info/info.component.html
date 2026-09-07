@@ -1,0 +1,15 @@
+@if (configElement()) {
+    <div class="info-container" [style]="styleAsString()">
+        <h3 style="padding: 0; margin: 0">{{ this.infoConfig?.titleDataKey }}</h3>
+
+        <p>
+            @if (this.createdTextFromData) {
+                {{ this.createdTextFromData }}
+            } @else {
+                {{ this.infoConfig?.descriptionDataKey }}
+            }
+        </p>
+        <!--        Assure the child content rendered correctly with ng-content-->
+        <ng-content />
+    </div>
+}

@@ -1,0 +1,24 @@
+<p-dataview #dv [value]="data()" paginator="true" [rows]="5">
+    <ng-template #list let-dataElement>
+        <div class="tickets_list">
+            @for (element of dataElement; track element.id; let first = $first) {
+                <div class="ticket_element">
+                    <ng-container
+                        [ngTemplateOutlet]="informationTemplate()"
+                        [ngTemplateOutletContext]="{
+                            element: element,
+                        }"
+                    />
+                    @if (actionTemplate()) {
+                        <ng-container
+                            [ngTemplateOutlet]="actionTemplate()"
+                            [ngTemplateOutletContext]="{
+                                element: element,
+                            }"
+                        />
+                    }
+                </div>
+            }
+        </div>
+    </ng-template>
+</p-dataview>

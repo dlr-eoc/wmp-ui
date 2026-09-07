@@ -1,0 +1,30 @@
+@if ((selectedRequestInstances | length) > 0) {
+    <h4>Process Instances:</h4>
+    <div class="process-instances">
+        @for (instance of selectedRequestInstances; track instance.id) {
+            <p-card
+                class="card-process"
+                [style]="{background: customColorsInstances.get(instance.id ?? '') ?? ''}"
+            >
+                <ng-template #title>
+                    {{ instance.processDefinitionKey }}
+                </ng-template>
+                @if (instance.id) {
+                    <div>
+                        <app-workflow-filter-selection-group
+                            [$workFlowFilterElementSting]="instance.id"
+                            [$workFlowFilterKey]="'processInstanceId'"
+                        />
+
+                        <br />
+                        State: {{ instance.state }}<br />
+                        Incidents: {{ incidents.get(instance.id)?.length }}<br />
+                        Start: {{ instance.startTime }}
+                    </div>
+                }
+            </p-card>
+        }
+    </div>
+} @else {
+    <h4>No Process Instance found</h4>
+}

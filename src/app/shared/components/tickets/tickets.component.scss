@@ -1,0 +1,18 @@
+.tickets_list {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    gap: 2rem;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    margin-right: 1rem;
+}
+.ticket_element {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    gap: 1rem;
+    width: 100%;
+}

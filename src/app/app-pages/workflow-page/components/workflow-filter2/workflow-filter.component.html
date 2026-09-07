@@ -1,0 +1,26 @@
+<p-accordion value="0">
+    <p-accordion-panel value="0">
+        <p-accordion-header>
+            <div style="display: flex; align-items: center; width: 100%; justify-content: flex-start">
+                <div style="width: 6.42rem">Filter (found: {{ availableProcessInstancesCount }})</div>
+
+                <div style="display: flex; flex: 1; gap: 0.242rem; justify-content: flex-start">
+                    @for (filter of filtersToDisplay; track filter.name) {
+                        <p-chip removable="true" (onRemove)="removeFilter(filter, $event)">{{
+                            filter.value
+                        }}</p-chip>
+                    }
+                </div>
+            </div>
+        </p-accordion-header>
+        <p-accordion-content>
+            <div class="filter-content">
+                <div class="filter-process-content">
+                    <app-process-definition-selector style="flex-grow: 1" />
+                    <app-process-instance-filter style="flex-grow: 1" />
+                </div>
+                <app-process-filter />
+            </div>
+        </p-accordion-content>
+    </p-accordion-panel>
+</p-accordion>

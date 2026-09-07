@@ -1,0 +1,78 @@
+<div style="display: flex; gap: 1rem">
+    <p-buttongroup>
+        <p-button
+            size="small"
+            label="Reload"
+            [icon]="ICON_RELOAD_DATA_PRIME"
+            (onClick)="updatePageDataWithCurrentFilter()"
+        />
+        <div style="width: 0.1rem"></div>
+        <p-button
+            size="small"
+            label="Restart Selected Jobs"
+            [icon]="ICON_RESTART_DEFINITION_PRIME"
+            (onClick)="visibleRetryDialog.set(true)"
+            [disabled]="selectedEntries.length === 0"
+        />
+        <div style="width: 0.1rem"></div>
+
+        @if (!checkJobsCanBeUnsuspended()) {
+            <p-button
+                size="small"
+                label="Suspend Selected Jobs"
+                [icon]="ICON_SUSPEND_DEFINITION_PRIME"
+                (onClick)="visibleSuspendDialog.set(true)"
+                [disabled]="!checkJobsCanBeSuspended() || selectedEntries.length === 0"
+            />
+            <div style="width: 0.1rem"></div>
+        }
+        @if (checkJobsCanBeUnsuspended()) {
+            <p-button
+                size="small"
+                label="Unsuspend Selected Jobs"
+                [icon]="ICON_UNSUSPEND_DEFINITION_PRIME"
+                (onClick)="visibleUnSuspendDialog.set(true)"
+                [disabled]="!checkJobsCanBeUnsuspended() || selectedEntries.length === 0"
+            />
+            <div style="width: 0.1rem"></div>
+        }
+        <p-button
+            size="small"
+            label="Terminate Selected Jobs"
+            [icon]="ICON_TERMINATE_DEFINITION_PRIME"
+            (onClick)="visibleTerminateDialog.set(true)"
+            [disabled]="!checkJobsCanBeTerminated() || selectedEntries.length === 0"
+        />
+    </p-buttongroup>
+</div>
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="visibleRetryDialog"
+    title="Retry failed Jobs"
+    [description]="'Please confirm to restart ' + (selectedEntries | length) + ' jobs'"
+    (clickedConfirm)="restartSelectedJobs()"
+/>
+
+<app-job-change-dialog
+    [visibleInput]="visibleTerminateDialog"
+    labelConfirm="Terminate!"
+    title="Terminate processes"
+    description="Are you sure you want to terminate the processes with IDs:"
+    (clickedConfirm)="terminateJobs()"
+    [selectedJobs]="selectedEntries"
+/>
+<app-job-change-dialog
+    [visibleInput]="visibleSuspendDialog"
+    labelConfirm="Suspend!"
+    title="Suspend processes"
+    description="Are you sure you want to suspend the processes with IDs:"
+    (clickedConfirm)="suspendJobs()"
+    [selectedJobs]="selectedEntries"
+/>
+<app-job-change-dialog
+    [visibleInput]="visibleUnSuspendDialog"
+    labelConfirm="Unsuspend!"
+    title="Unsuspend processes"
+    description="Are you sure you want to unsuspend the processes with IDs:"
+    (clickedConfirm)="unSuspendJobs()"
+    [selectedJobs]="selectedEntries"
+/>

@@ -1,0 +1,25 @@
+.context-menu-label {
+    display: flex;
+    margin-left: 1rem;
+}
+.context-menu-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 35.42rem;
+}
+.context-menu-link {
+    cursor: pointer;
+}
+.router-navigation {
+    display: flex;
+    align-items: center;
+}
+.process-navigation-panel {
+    display: flex;
+    flex-direction: column;
+}
+.process-navigation {
+    display: flex;
+    align-items: center;
+}

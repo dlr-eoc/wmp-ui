@@ -1,0 +1,64 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false">
+  <h3 class="modal-title">Create new user</h3>
+  <div class="modal-body">
+    <clr-alert [(clrAlertClosed)]="alertClosed" clrAlertType="danger">
+      <clr-alert-item>
+        <span class="alert-text">{{ alertText }}</span>
+      </clr-alert-item>
+    </clr-alert>
+    <form
+      [formGroup]="form"
+      clrForm
+      clrLayout="vertical-inline"
+    >
+      <clr-input-container>
+        <label class="clr-col-12 clr-col-md-3 clr-required-mark"
+          >First Name</label
+        >
+        <input
+          clrInput
+          class="clr-col-12 clr-col-md-9 full-width"
+          placeholder="First Name"
+          name="firstName"
+          required
+          formControlName="firstName"
+        />
+      </clr-input-container>
+      <clr-input-container>
+        <label class="clr-col-12 clr-col-md-3 clr-required-mark"
+          >Last Name</label
+        >
+        <input
+          clrInput
+          class="clr-col-12 clr-col-md-9 full-width"
+          placeholder="Last Name"
+          name="lastName"
+          required
+          formControlName="lastName"
+        />
+      </clr-input-container>
+      <clr-input-container>
+        <label class="clr-col-12 clr-col-md-3">Email</label>
+        <input
+          class="clr-col-12 clr-col-md-9 full-width"
+          clrInput
+          placeholder="Email"
+          name="email"
+          formControlName="email"
+        />
+      </clr-input-container>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="open = false; openChange.emit(false)"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-warning" (click)="onSubmit()">
+      Create
+    </button>
+  </div>
+</clr-modal>

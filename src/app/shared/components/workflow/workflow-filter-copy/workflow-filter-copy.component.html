@@ -1,0 +1,11 @@
+@if (workflowFilterLink) {
+    <p-button
+        [style]="style()"
+        [severity]="severity()"
+        [variant]="variant()"
+        [size]="size()"
+        icon="pi pi-copy"
+        [pTooltip]="toolTipText() ? toolTipText() : 'Copy current WorkflowFilterLink to clipboard'"
+        [cdkCopyToClipboard]="workflowFilterLink"
+    />
+}

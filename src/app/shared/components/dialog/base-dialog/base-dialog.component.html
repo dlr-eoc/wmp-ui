@@ -1,0 +1,14 @@
+<p-dialog
+    (visibleChange)="handleVisibleChange($event)"
+    (onShow)="handleShow($event)"
+    (onHide)="handleHide($event)"
+    [visible]="visibleInputSignal()()"
+    [modal]="true"
+    [class]="flex() ? 'base-dialog-flex' : 'base-dialog'"
+    [header]="title()"
+>
+    <ng-container [ngTemplateOutlet]="dialogContentTemplate()" />
+    <ng-template #footer>
+        <ng-container [ngTemplateOutlet]="dialogFooterTemplate()" />
+    </ng-template>
+</p-dialog>

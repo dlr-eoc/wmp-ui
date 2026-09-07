@@ -1,0 +1,16 @@
+//selection of an element not displayed, rendering own one
+.djs-outline {
+    display: none;
+}
+
+//cursor of connections? (arrows)
+.djs-element .djs-hit-stroke,
+.djs-element .djs-hit-click-stroke,
+.djs-element .djs-hit-all {
+    cursor: pointer;
+}
+
+// cursor of elements (activities, gateways...)
+.djs-hit {
+    cursor: pointer;
+}

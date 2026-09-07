@@ -1,0 +1,16 @@
+<div class="content-container full-height">
+    <div class="content-area">
+        <router-outlet></router-outlet>
+    </div>
+    <clr-vertical-nav>
+        <a clrVerticalNavLink routerLink="/admin/users" routerLinkActive="active">
+            <cds-icon clrVerticalNavIcon shape="user"></cds-icon>Users
+        </a>
+        <a clrVerticalNavLink routerLink="/admin/topic-groups" routerLinkActive="active">
+            <cds-icon clrVerticalNavIcon shape="file-group"></cds-icon>Topic Groups
+        </a>
+        <a clrVerticalNavLink routerLink="/admin/executions" routerLinkActive="active">
+            <cds-icon clrVerticalNavIcon shape="terminal"></cds-icon>Executions
+        </a>
+    </clr-vertical-nav>
+</div>

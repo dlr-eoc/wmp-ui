@@ -1,0 +1,38 @@
+.request-detail {
+    //border: 1px solid;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+    gap: 1rem;
+    height: 100%;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.request-detail-data {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    gap: 2rem;
+}
+
+.request-command {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 4rem;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+}
+.request-raw-data-container {
+    display: flex;
+    flex-direction: column;
+}
+.request-raw-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.request-detail-pi {
+    min-height: 4rem;
+}

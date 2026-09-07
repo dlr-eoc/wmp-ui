@@ -1,0 +1,12 @@
+.message-pop-over {
+    min-width: 20rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+}
+.message-table-content {
+    cursor: pointer;
+    text-wrap: wrap;
+}

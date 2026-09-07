@@ -1,0 +1,9 @@
+.card:hover {
+    cursor: pointer;
+}
+
+.process-instances {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}

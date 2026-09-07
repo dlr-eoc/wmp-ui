@@ -1,0 +1,44 @@
+<app-table
+    [columnTemplate]="customTableColumns"
+    [totalAvailableCount]="totalAvailableRequests | async | fallback: 0"
+    [availableData]="availableRequests"
+    [defaultColumnsOfTable]="columnsOfTable"
+    [tableConfigurationIdentifier]="REQUEST_CONFIG_TABLES.REQUEST_TABLE_LIST"
+    selectionMode="single"
+    (onLazyLoad)="handleLazyLoad($event)"
+    (onSingleSelectionChanged)="handleSelectionChange($event)"
+>
+    <ng-template let-instance="entryOfTable" let-columns="columnsOfTable" #customTableColumns>
+        <tr [pSelectableRow]="instance">
+            @for (column of columns; track column.field) {
+                @switch (column.field) {
+                    @case ("creationDate") {
+                        <td>{{ instance[column.field].toISOString() }}</td>
+                    }
+                    @case ("status") {
+                        @if (failures?.get(RequestFailureType.TERMINATED)?.get(instance.id) ?? false) {
+                            <td [style]="{background: COLOR_TERMINATED_WITH_OPACITY}">
+                                {{ instance[column.field] }}
+                            </td>
+                        } @else if (failures?.get(RequestFailureType.INCIDENT)?.get(instance.id) ?? false) {
+                            <td [style]="{background: COLOR_INCIDENT_WITH_OPACITY}">
+                                {{ instance[column.field] }}
+                            </td>
+                        } @else {
+                            <td>
+                                {{ instance[column.field] }}
+                            </td>
+                        }
+                    }
+                    @default {
+                        @if (column.customColumn) {
+                            <td>{{ this.getFromRequestAttributes(column, instance) }}</td>
+                        } @else {
+                            <td>{{ instance[column.field] }}</td>
+                        }
+                    }
+                }
+            }
+        </tr>
+    </ng-template>
+</app-table>

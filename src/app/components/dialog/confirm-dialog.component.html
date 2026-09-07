@@ -1,0 +1,19 @@
+<clr-modal [clrModalSize]="'sm'" [(clrModalOpen)]="dialogOpen">
+    <h3 class="modal-title">{{ title() }}</h3>
+    <div class="modal-body">
+        {{ text() }}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="dialogConfirmationHandler().onDestroy()">
+            Cancel
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="dialogConfirmationHandler().onDialogConfirmed.next()"
+        >
+            Ok
+        </button>
+    </div>
+</clr-modal>

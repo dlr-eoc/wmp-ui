@@ -1,0 +1,176 @@
+openapi: 3.0.0
+info:
+  title: WMP Logging Service API
+  description: Provides an API to provide central logging functionality to external subcomponents
+  version: ${project.version}
+tags:
+  - name: Log
+    description: Provides an API to provide central logging functionality
+paths:
+  /log:
+    post:
+      operationId: log
+      summary: log an entry
+      description: create a new log entry in the central wmp logging service
+      parameters: []
+      tags:
+        - Log
+      requestBody:
+        required: true
+        description: the log entry to create
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogMessage'
+      responses:
+        "201":
+          description: The request was successful, and a new resource was created.
+        "400":
+          description: The server could not understand the request due to invalid syntax.
+            The client should modify the request and try again.
+        "401":
+          description: Authentication is required to access the requested resource. The
+            client must include the appropriate credentials.
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+        "409":
+          description: The request could not be completed due to a conflict with the
+            current state of the resource. Resolve the conflict and try again.
+        "500":
+          description: The server encountered an unexpected condition that prevented it
+            from fulfilling the request. Report the issue to the support team if it
+            persists.
+    put:
+      operationId: getLogs
+      summary: getLogs
+      description: Gets a list of all logs
+      requestBody:
+        description: log filter
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogFilter'
+      tags:
+        - Log
+
+      responses:
+        '200':
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogMessage'
+        "400":
+          description: The server could not understand the request due to invalid syntax.
+            The client should modify the request and try again.
+        "401":
+          description: Authentication is required to access the requested resource. The
+            client must include the appropriate credentials.
+        "403":
+          description: The server understood the request, but refuses to authorize it.
+            Ensure the client has appropriate permissions.
+        "404":
+          description: The server cannot find the requested resource. The endpoint may be
+            invalid or the resource may no longer exist.
+        "500":
+          description: The server encountered an unexpected condition that prevented it
+            from fulfilling the request. Report the issue to the support team if it
+            persists.
+
+components:
+  schemas:
+    TimeRange:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        stop:
+          type: integer
+          format: int64
+
+    MatchType:
+      type: string
+      enum: [ALL, ANY, NONE]
+
+    Ordering:
+      type: object
+      properties:
+        orderBy:
+          type: array
+          items:
+            type: string
+        asc:
+          type: boolean
+
+    FieldValueConstraints:
+      type: object
+      properties:
+        matchValue:
+          type: array
+          items:
+            type: string
+        matchType:
+          $ref: "#/components/schemas/MatchType"
+        caseSensitive:
+          type: boolean
+    Pagination:
+      type: object
+      properties:
+        offset:
+          type: int
+          default: 0
+        limit:
+          type: int
+          example: 1000
+
+    LogFilter:
+      type: object
+      properties:
+        range:
+          $ref: "#/components/schemas/TimeRange"
+        constraints:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/FieldValueConstraints"
+        ordering:
+          $ref: "#/components/schemas/Ordering"
+        pagination:
+          $ref: "#/components/schemas/Pagination"
+
+    LogMessage:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+        logLevel:
+          type: string
+        thread:
+          type: string
+        name:
+          type: string
+        requestId:
+          type: string
+        processDefinitionId:
+          type: string
+        processInstanceId:
+          type: string
+        topicGroup:
+          type: string
+        topic:
+          type: string
+        execution:
+          type: string
+        processBridge:
+          type: string
+        message:
+          type: string
+      required:
+        - timestamp
+        - logLevel
+        - message

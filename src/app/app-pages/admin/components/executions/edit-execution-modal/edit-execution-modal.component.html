@@ -1,0 +1,77 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false">
+    <h3 class="modal-title">Update execution</h3>
+    <div class="modal-body">
+        <clr-alert [(clrAlertClosed)]="alertClosed" clrAlertType="danger">
+            <clr-alert-item>
+                <span class="alert-text">{{ alertText }}</span>
+            </clr-alert-item>
+        </clr-alert>
+        <form [formGroup]="form" clrForm clrLayout="vertical-inline">
+            <clr-input-container>
+                <label class="clr-col-12 clr-col-md-3 clr-required-mark">Name</label>
+                <input
+                    clrInput
+                    class="clr-col-12 clr-col-md-9 full-width"
+                    placeholder="Execution name"
+                    name="name"
+                    required
+                    formControlName="name"
+                />
+            </clr-input-container>
+            <clr-input-container>
+                <label class="clr-col-12 clr-col-md-3 clr-required-mark">Class</label>
+                <input
+                    clrInput
+                    class="clr-col-12 clr-col-md-9 full-width"
+                    placeholder="ex. de.dlr.wmp.task.JavaTaskExecutor"
+                    name="className"
+                    required
+                    formControlName="className"
+                />
+            </clr-input-container>
+            <clr-toggle-container clrHorizontalInline>
+                <label class="clr-col-12 clr-col-md-3">Enabled</label>
+                <clr-toggle-wrapper>
+                    <input type="checkbox" clrToggle value="enabled" name="enabled" />
+                </clr-toggle-wrapper>
+            </clr-toggle-container>
+        </form>
+        <clr-datagrid>
+            <clr-dg-column>Key</clr-dg-column>
+            <clr-dg-column>Value</clr-dg-column>
+
+            @for (element of additionalElements; track element) {
+                <clr-dg-row>
+                    <clr-dg-action-overflow>
+                        <button class="action-item" (click)="deleteEntry(element)">Delete</button>
+                    </clr-dg-action-overflow>
+                    <clr-dg-cell>{{ element.key }}</clr-dg-cell>
+                    <clr-dg-cell>{{ element.value }}</clr-dg-cell>
+                </clr-dg-row>
+            }
+        </clr-datagrid>
+
+        <div class="clr-col-12 element-input">
+            <input
+                class="clr-input custom-input clr-col-md-5"
+                placeholder="Key"
+                name="key"
+                [(ngModel)]="key"
+            />
+
+            <input
+                class="clr-input custom-input clr-col-md-5"
+                placeholder="Value"
+                name="value"
+                [(ngModel)]="value"
+            />
+            <button type="button" class="btn btn-sm clr-col-md-2" (click)="addEntry()">Add</button>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="open = false; openChange.emit(false)">
+            Cancel
+        </button>
+        <button type="button" class="btn btn-warning" (click)="onSubmit()">Update</button>
+    </div>
+</clr-modal>

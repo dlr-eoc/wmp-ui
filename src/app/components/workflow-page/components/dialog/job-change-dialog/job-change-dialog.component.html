@@ -1,0 +1,17 @@
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="visibleInput()"
+    [dialogAdditionalContent]="additionalDialogContent"
+    [title]="title()"
+    [description]="description()"
+    [labelConfirm]="labelConfirm()"
+    (clickedConfirm)="this.clickedConfirm.emit()"
+>
+    <ng-template #additionalDialogContent>
+        <br /><br />
+        <ul>
+            @for (job of selectedJobs(); track job.id) {
+                <li style="margin-left: 0.4rem">• {{ job.id }}</li>
+            }
+        </ul>
+    </ng-template>
+</app-confirm-cancel-dialog>

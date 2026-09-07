@@ -1,0 +1,6 @@
+@use "src/styles.scss" as globalStyle;
+
+.main-prime-container {
+    padding: #{globalStyle.$default-padding-content-area};
+    width: 100%;
+}

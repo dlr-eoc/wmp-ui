@@ -1,0 +1,33 @@
+<div style="display: flex; flex: 1">
+    @switch (configElement()?.type) {
+        @case (VISUAL_CONFIGURATION_TYPE.INFO) {
+            <app-info [configElement]="this.configElement()" [styleAsString]="styleAsString">
+                @if (infoConfig?.childElement) {
+                    <!--                    case child element present also render it-->
+                    <app-visual [configElement]="infoConfig?.childElement" />
+                }
+            </app-info>
+        }
+        @case (VISUAL_CONFIGURATION_TYPE.CONTAINER) {
+            <div class="custom-container" [style]="styleAsString">
+                @for (childElement of containerConfig?.childElements; track childElement.id) {
+                    @switch (childElement.type) {
+                        @case (VISUAL_CONFIGURATION_TYPE.BPMN) {
+                            <app-visual style="display: flex; flex: 1" [configElement]="childElement" />
+                        }
+                        @default {
+                            <app-visual [configElement]="childElement" />
+                        }
+                    }
+                }
+            </div>
+        }
+        @case (VISUAL_CONFIGURATION_TYPE.BPMN) {
+            <!--        currently hardcoded style, flex 1-->
+            <app-visual-bpmn style="display: flex; flex: 1" [configElement]="this.configElement()" />
+        }
+        @default {
+            <div>Invalid visual config element</div>
+        }
+    }
+</div>

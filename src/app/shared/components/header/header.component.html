@@ -1,0 +1,73 @@
+<clr-header class="header-6">
+    <div class="branding">
+        <a class="nav-link" routerLink="/">
+            <cds-icon shape="network-globe" style="color: #5d87b7" />
+            <span class="title">WMP-UI</span>
+        </a>
+    </div>
+    <div class="header-nav" [clr-nav-level]="1">
+        <a class="nav-link" [routerLink]="'/' + dashboardURL" routerLinkActive="active">
+            {{ getDisplayName(dashboardURL) }}
+        </a>
+        <a class="nav-link" [routerLink]="'/' + workflowsURL" routerLinkActive="active">
+            {{ getDisplayName(workflowsURL) }}
+        </a>
+        <a class="nav-link" routerLink="/requests" routerLinkActive="active">
+            {{ getDisplayName('/requests') }}
+        </a>
+        <a class="nav-link" routerLink="/bridge" routerLinkActive="active">
+            {{ getDisplayName('/bridge') }}
+        </a>
+        <a class="nav-link" routerLink="/log" routerLinkActive="active">
+            {{ getDisplayName('/log') }}
+        </a>
+        <a class="nav-link" routerLink="/admin/users" routerLinkActive="active">
+            {{ getDisplayName('/admin/users') }}
+        </a>
+        <!-- <a
+              class="nav-link"
+              routerLink="process-instance"
+              routerLinkActive="active"
+              >Process Instances</a
+            > -->
+        <!-- <a class="nav-link" routerLink="timers" routerLinkActive="active"
+            >Timers</a
+            > -->
+    </div>
+
+    <div class="header-nav" [clr-nav-level]="2">
+        <app-context-menu />
+        <app-workflow-filter-copy
+            [workflowFilterLink$]="this.workflowFilterService.workflowFilterLink$"
+            severity="secondary"
+            [variant]="undefined"
+        />
+    </div>
+
+    <div class="header-actions">
+        <div style="align-items: center; display: flex; padding-right: 1rem">
+            <p-toggleswitch (onChange)="changeDarkMode($event)" [(ngModel)]="isLightMode">
+                <ng-template #handle let-checked="checked">
+                    @if (checked) {
+                        <i class="pi pi-sun" style="font-size: 90%"></i>
+                    } @else {
+                        <i class="pi pi-moon" style="font-size: 90%"></i>
+                    }
+                </ng-template>
+            </p-toggleswitch>
+        </div>
+        <clr-dropdown>
+            <button class="nav-text" clrDropdownTrigger>
+                <cds-icon shape="user"></cds-icon>
+                &nbsp;{{ auth.getLoggedInUser() }}
+                <cds-icon shape="angle" direction="down"></cds-icon>
+            </button>
+            <clr-dropdown-menu *clrIfOpen clrPosition="bottom-right">
+                <a clrDropdownItem (click)="logoutUser()">
+                    <cds-icon shape="logout"></cds-icon>
+                    Logout
+                </a>
+            </clr-dropdown-menu>
+        </clr-dropdown>
+    </div>
+</clr-header>

@@ -1,0 +1,9 @@
+@if (this.bpmnHandlerService) {
+    <div style="display: flex; flex-direction: row; flex-grow: 1">
+        <div class="bpmn-diagram">
+            @if (this.bpmnManager) {
+                <app-bpmn-diagram-container [bpmnManager]="this.bpmnManager" />
+            }
+        </div>
+    </div>
+}

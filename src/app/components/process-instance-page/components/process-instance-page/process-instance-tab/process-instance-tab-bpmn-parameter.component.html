@@ -1,0 +1,25 @@
+<clr-tab-content>
+    <clr-datagrid [clrDgLoading]="(bpmnParametersLoading | async) ?? true">
+        @if (!activityName || activityName === "") {
+            <clr-dg-column [clrDgField]="'activityName'" [style.width.rem]="15">Activity Name</clr-dg-column>
+        }
+
+        <clr-dg-column [clrDgField]="'type'" [style.width.rem]="10">Input/Output</clr-dg-column>
+        <clr-dg-column [clrDgField]="'key'" [style.width.rem]="10">Parameter Name</clr-dg-column>
+        <clr-dg-column [clrDgField]="'value'">Parameter Value</clr-dg-column>
+
+        <clr-dg-row
+            *clrDgItems="let bpmnParameter of bpmnParameters | BPMNParameterFilterActivity: activityName"
+        >
+            @if (!activityName || activityName === "") {
+                <clr-dg-cell>{{ bpmnParameter.activityName }}</clr-dg-cell>
+            }
+
+            <clr-dg-cell>{{ bpmnParameter.type }}</clr-dg-cell>
+            <clr-dg-cell>{{ bpmnParameter.key }}</clr-dg-cell>
+            <clr-dg-cell>{{ bpmnParameter.value }}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer> {{ bpmnParameters.length }} parameters</clr-dg-footer>
+    </clr-datagrid>
+</clr-tab-content>

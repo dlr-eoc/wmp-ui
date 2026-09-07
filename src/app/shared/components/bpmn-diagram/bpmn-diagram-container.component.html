@@ -1,0 +1,54 @@
+<div class="diagram-header">
+    @if (diagramTitle | async | fallback: '') {
+        <div class="diagram-title">
+            <body style="color: black">
+                {{ diagramTitle | async | fallback: '' }} - Version:
+                {{ diagramVersion | async | fallback: '' }}
+            </body>
+
+            @if (requestId | async | fallback: '') {
+                <div>
+                    <a [routerLink]="'/requests'" [queryParams]="{id: requestId | async | fallback: ''}">
+                        Request: {{ requestId | async | fallback: '' }}
+                    </a>
+                </div>
+            }
+        </div>
+    }
+    <div class="diagram-controls">
+        <p-button-group>
+            <p-button
+                [style]="overlayBpmnStyle"
+                icon="pi pi-minus"
+                size="small"
+                variant="outlined"
+                (click)="this.bpmnDiagramService?.zoomOut()"
+            />
+            <p-button
+                [style]="overlayBpmnStyle"
+                icon="pi pi-home"
+                size="small"
+                variant="outlined"
+                (click)="this.bpmnDiagramService?.zoomHome()"
+            />
+            <p-button
+                [style]="overlayBpmnStyle"
+                icon="pi pi-plus"
+                size="small"
+                variant="outlined"
+                (click)="this.bpmnDiagramService?.zoomIn()"
+            />
+        </p-button-group>
+        @if (workflowFilterLink$) {
+            <app-workflow-filter-copy
+                toolTipText="Copy the URL of this BPMN"
+                [workflowFilterLink$]="workflowFilterLink$"
+                size="small"
+                [style]="overlayBpmnStyle"
+            />
+        }
+    </div>
+</div>
+<div style="display: flex; flex: 1">
+    <app-bpmn-diagram class="app-bpmn-diagram" [bpmnManager]="this.bpmnManager()" />
+</div>

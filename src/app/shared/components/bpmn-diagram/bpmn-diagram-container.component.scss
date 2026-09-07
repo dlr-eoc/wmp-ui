@@ -1,0 +1,44 @@
+@use 'src/styles.scss' as globalStyle;
+
+:host {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.diagram-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 0;
+}
+
+.diagram-title {
+    z-index: 999;
+    height: 1.5rem;
+    padding: globalStyle.$bpmn-diagram-spacing-default;
+    font-weight: bold;
+    background-color: rgb(255, 255, 255, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+.diagram-controls {
+    display: flex;
+    gap: globalStyle.$bpmn-diagram-spacing-default;
+    margin: globalStyle.$bpmn-diagram-spacing-default;
+}
+
+.btn-zoom-grp {
+    position: absolute;
+    margin-top: globalStyle.$bpmn-diagram-spacing-default;
+    margin-right: 0.5rem;
+    z-index: 999;
+    background-color: rgb(255, 255, 255, 0.65);
+    backdrop-filter: blur(2px);
+}
+
+.badge-clickable {
+    cursor: pointer;
+    z-index: 1000;
+    position: relative;
+}

@@ -1,0 +1,14 @@
+.selected-task {
+    background-color: rgba(0, 0, 0, 0.1);
+    flex: 1;
+    padding: 0.5rem;
+}
+.task {
+    flex: 1;
+    padding: 0.5rem;
+}
+.observer-tickets {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}

@@ -1,0 +1,4 @@
+{
+  "jakartaURL": "${API_URL}/engine-rest",
+  "springURL": "${API_URL}"
+}

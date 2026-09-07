@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+//@use "tailwindcss";
+@import 'primeicons/primeicons.css';
+
+//if using variables in calculations see https://stackoverflow.com/a/20236515 - just use #{variable}
+
+$bpmn-diagram-spacing-default: 0.5em;
+$bpmn-diagram-height-default: 40vh;
+
+//TODO primeNG change, assure to use correct height here
+$navigation-header-height: var(--clr-header-height);
+
+$default-padding-content-area: 1.2rem;
+
+@mixin bpmn-diagram-base-style() {
+    border: solid thin #ccc;
+    background-color: white;
+    border-radius: var(--clr-accordion-border-radius, 0.15rem);
+    position: relative;
+}
+
+@mixin bpmn-diagram-placeholder-style() {
+    @include bpmn-diagram-base-style();
+    height: $bpmn-diagram-height-default;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

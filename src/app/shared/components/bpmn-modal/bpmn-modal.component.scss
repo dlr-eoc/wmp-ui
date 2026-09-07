@@ -1,0 +1,4 @@
+@use 'src/styles.scss' as globalStyle;
+.bpmn-diagram {
+    @include globalStyle.bpmn-diagram-base-style();
+}

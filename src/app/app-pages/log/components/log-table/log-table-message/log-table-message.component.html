@@ -1,0 +1,23 @@
+<div class="message-table-content" pTooltip="Click to view" (click)="togglePopOver($event)">
+    @if (($message() | fallback: "").length > 100) {
+        {{ $message() | fallback: "" | slice: 0 : 100 }} ...
+    } @else {
+        {{ $message() | fallback: "" }}
+    }
+</div>
+
+<p-popover #op>
+    <div class="message-pop-over">
+        <div class="message-pop-over-panel">
+            {{ $message() }}
+        </div>
+        <div>
+            <p-button
+                severity="secondary"
+                icon="pi   pi-copy"
+                pTooltip="Copy to clipboard"
+                [cdkCopyToClipboard]="$message() ?? ''"
+            />
+        </div>
+    </div>
+</p-popover>

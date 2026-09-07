@@ -1,0 +1,43 @@
+<clr-modal [(clrModalOpen)]="open" [clrModalClosable]="false">
+  <h3 class="modal-title">Change topic group</h3>
+  <div class="modal-body">
+    <clr-alert [(clrAlertClosed)]="alertClosed" clrAlertType="danger">
+      <clr-alert-item>
+        <span class="alert-text">{{ alertText }}</span>
+      </clr-alert-item>
+    </clr-alert>
+    <p>Choose a new Topic Group for the topic {{ data.topicName }}</p>
+    <clr-combobox-container>
+      <label>New TopicGroup:</label>
+      <clr-combobox
+        [(ngModel)]="selectedTopicGroup"
+        name="selectedTopicGroup"
+        required
+      >
+        <clr-options>
+          <clr-option
+            *clrOptionItems="let topicGroup of data.topicGroups; field: 'name'"
+            [clrValue]="topicGroup"
+          >
+            {{ topicGroup.name }}
+          </clr-option>
+        </clr-options>
+      </clr-combobox>
+      <clr-control-error
+        >Please choose an existing topic group</clr-control-error
+      >
+    </clr-combobox-container>
+  </div>
+  <div class="modal-footer">
+    <button
+      type="button"
+      class="btn btn-outline"
+      (click)="open = false; openChange.emit(false)"
+    >
+      Cancel
+    </button>
+    <button type="button" class="btn btn-warning" (click)="onSubmit()">
+      Change Group
+    </button>
+  </div>
+</clr-modal>

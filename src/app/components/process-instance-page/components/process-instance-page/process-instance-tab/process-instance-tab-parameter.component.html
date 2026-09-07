@@ -1,0 +1,64 @@
+<clr-tab-content>
+    <clr-datagrid [clrDgLoading]="processInstanceVariablesLoading | async | fallback: true">
+        <clr-dg-column [clrDgField]="'name'" [style.width.rem]="15">Name</clr-dg-column>
+        <clr-dg-column [style.width.rem]="10">Scope</clr-dg-column>
+        <clr-dg-column>Value</clr-dg-column>
+        <clr-dg-column [style.width.rem]="5">Type</clr-dg-column>
+
+        <clr-dg-row
+            *clrDgItems="
+                let processInstanceVariable of instanceVariables
+                    | ParameterFilterActivity: activityInstance() : bpmnParameters
+            "
+        >
+            <clr-dg-cell>{{ processInstanceVariable.name }}</clr-dg-cell>
+            <clr-dg-cell
+                >{{
+                    (activityInstanceNameMap | async | fallback: {})[
+                        processInstanceVariable.activityInstanceId || ''
+                    ]
+                }}
+            </clr-dg-cell>
+            <clr-dg-cell style="display: flex">
+                @if (processInstanceVariable.type === 'Object') {
+                    <div style="font-weight: lighter">(expand to view)</div>
+                }
+                @if (processInstanceVariable.type !== 'Object') {
+                    <div>
+                        @if (checkValueTokenString(processInstanceVariable)) {
+                            <div>(Token to Secret)</div>
+                        }
+                        @if (!checkValueTokenString(processInstanceVariable)) {
+                            <div>
+                                {{ processInstanceVariable.value }}
+                            </div>
+                        }
+                    </div>
+                }
+                @if (checkParameterExists(processInstanceVariable.name)) {
+                    <a role="tooltip" aria-haspopup="true" class="tooltip tooltip-md">
+                        <cds-icon shape="info-circle"></cds-icon>
+                        <span class="tooltip-content">{{
+                            printBPMNParameterValueTooltip(processInstanceVariable.name)
+                        }}</span>
+                    </a>
+                }
+            </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceVariable.type }}</clr-dg-cell>
+
+            @if (processInstanceVariable.type === 'Object') {
+                <ng-container ngProjectAs="clr-dg-row-detail">
+                    <clr-dg-row-detail *clrIfExpanded>
+                        <div class="object-value-cell">
+                            <pre>{{ processInstanceVariable.value | saferJson }}</pre>
+                        </div>
+                    </clr-dg-row-detail>
+                </ng-container>
+            }
+        </clr-dg-row>
+
+        <clr-dg-footer>
+            {{ (processInstanceVariables | async | fallback: []).length }} variables
+        </clr-dg-footer>
+    </clr-datagrid>
+</clr-tab-content>

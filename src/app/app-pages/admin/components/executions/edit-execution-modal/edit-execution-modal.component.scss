@@ -1,0 +1,19 @@
+.full-width {
+  width: 100%;
+}
+
+.custom-input {
+  margin-right: 0.8rem;
+  margin-left: -0.5rem;
+}
+
+.element-input {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+:host ::ng-deep .clr-control-container {
+  flex: 0 0 75%;
+  max-width: 75%;
+}

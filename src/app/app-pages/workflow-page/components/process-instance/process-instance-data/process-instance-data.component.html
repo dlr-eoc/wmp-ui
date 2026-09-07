@@ -1,0 +1,33 @@
+<clr-tabs>
+    <clr-tab>
+        <button clrTabLink>
+            @if (taskSelected) {
+                [{{ taskSelected }}]
+            }
+            WMP Log
+        </button>
+        <clr-tab-content>
+            <app-log-widget [$logColumns]="this.columnsOfLogWidgetActivity.asObservable()" />
+        </clr-tab-content>
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>Process Instance Parameters</button>
+        <app-process-instance-tab-parameter />
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>BPMN Parameters</button>
+        <app-process-instance-tab-bpmn-parameter />
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>Incidents</button>
+        <app-process-instance-tab-incident />
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>Audit Log</button>
+        <app-process-instance-tab-audit />
+    </clr-tab>
+    <clr-tab>
+        <button clrTabLink>Job Log</button>
+        <app-process-instance-tab-job />
+    </clr-tab>
+</clr-tabs>

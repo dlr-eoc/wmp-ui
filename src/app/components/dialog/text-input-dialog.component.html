@@ -1,0 +1,27 @@
+<clr-modal [(clrModalOpen)]="dialogOpen">
+    <h3 class="modal-title">{{ title() }}</h3>
+    <div class="modal-body">
+        <div>
+            {{ text() }}
+            <form clrForm>
+                <clr-input-container>
+                    <label>Reason</label>
+                    <input clrInput [(ngModel)]="input" name="input" size="50%" />
+                    <clr-control-error>This field is required!</clr-control-error>
+                </clr-input-container>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="dialogTextInputHandler().onDestroy()">
+            Cancel
+        </button>
+        <button
+            type="button"
+            class="btn btn-primary"
+            (click)="dialogTextInputHandler().onDialogConfirmed.next(input)"
+        >
+            Ok
+        </button>
+    </div>
+</clr-modal>

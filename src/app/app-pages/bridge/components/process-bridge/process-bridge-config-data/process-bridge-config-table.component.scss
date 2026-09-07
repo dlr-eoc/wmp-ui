@@ -1,0 +1,30 @@
+p-table a {
+    color: var(--p-primary-500);
+}
+.pb-configTable {
+    flex-grow: 1;
+    padding: 1rem;
+}
+.pb-configTableSelector {
+    padding: 1rem;
+    overflow: auto;
+    width: 100%;
+}
+.pb-configTableContainer {
+}
+
+.pb-config-data-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+.pb-config-data {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-items: center;
+}
+.pb-config-data-element {
+    display: flex;
+    align-items: center;
+}

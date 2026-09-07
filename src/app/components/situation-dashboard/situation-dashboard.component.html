@@ -1,0 +1,28 @@
+<div class="chart-container">
+    <div class="pie-chart">
+        <h2>Total Running</h2>
+        @if (pieRequestsData() === undefined) {
+            <p-progressSpinner />
+        } @else {
+            <p-chart
+                type="pie"
+                [data]="pieRequestsData()"
+                [options]="pieChartOptionsLegendLeftSide()"
+                (onDataSelect)="handleSelectionRequest($event)"
+            />
+        }
+    </div>
+    <div class="pie-chart">
+        <h2>Incidents</h2>
+        @if (pieIncidentData() === undefined) {
+            <p-progressSpinner />
+        } @else {
+            <p-chart
+                type="pie"
+                [data]="pieIncidentData()"
+                [options]="pieChartOptionsLegendRight()"
+                (onDataSelect)="handleSelectionIncident($event)"
+            />
+        }
+    </div>
+</div>

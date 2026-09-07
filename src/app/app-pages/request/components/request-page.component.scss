@@ -1,0 +1,5 @@
+@use "src/styles.scss" as globalStyle;
+
+.request-page-content {
+    height: calc(100vh - #{globalStyle.$navigation-header-height});
+}

@@ -1,0 +1,60 @@
+<div class="log-filter">
+    <div class="log-filter-input">
+        @if (!isWidget()) {
+            <p-floatlabel>
+                <input
+                    pInputText
+                    id="processInstanceId_input"
+                    [(ngModel)]="processInstanceId"
+                    autocomplete="off"
+                    (keydown.enter)="submit()"
+                />
+                <label for="processInstanceId_input">ProcessInstanceId: </label>
+            </p-floatlabel>
+            @if (activityInstanceId) {
+                <p-floatlabel>
+                    <input
+                        disabled
+                        pInputText
+                        id="activityInstanceId_input"
+                        [(ngModel)]="activityInstanceId"
+                        autocomplete="off"
+                        (keydown.enter)="submit()"
+                    />
+                    <label for="activityInstanceId_input">ActivityInstanceId: </label>
+                </p-floatlabel>
+            }
+
+            <p-floatlabel>
+                <input
+                    pInputText
+                    id="requestId_input"
+                    [(ngModel)]="requestId"
+                    autocomplete="off"
+                    (keydown.enter)="submit()"
+                />
+                <label for="requestId_input">RequestId: </label>
+            </p-floatlabel>
+        }
+        <p-autocomplete
+            [(ngModel)]="selectedLogLevel"
+            [dropdown]="true"
+            [suggestions]="currentLogLevels"
+            (completeMethod)="searchForType($event)"
+        ></p-autocomplete>
+        <p-button icon="pi pi-times" (onClick)="resetForm()" />
+        <p-button icon="pi pi-search" label="Search" (onClick)="submit()" />
+    </div>
+    @if (!isWidget()) {
+        <p-multiselect
+            id="log-table-column-selection"
+            display="chip"
+            [options]="columnsOfTable"
+            [(ngModel)]="selectedColumns"
+            (onChange)="changeColumnSelection()"
+            optionLabel="header"
+            selectedItemsLabel="{0} columns selected"
+            placeholder="Choose Columns"
+        ></p-multiselect>
+    }
+</div>

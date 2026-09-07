@@ -1,0 +1,77 @@
+<p-panel header="Process Filter">
+    <div style="display: flex; flex-direction: row; flex-wrap: wrap; flex: 1; gap: 1rem">
+        <p-select
+            [options]="activities"
+            optionLabel="name"
+            [(ngModel)]="activityFromWorkflow"
+            (onChange)="handleActivityChange()"
+            placeholder="Select an activity"
+            appendTo="body"
+        />
+        <div style="display: flex; align-items: center; gap: 0.2rem">
+            <p-toggle-switch
+                [style]="{display: 'flex'}"
+                [(ngModel)]="workflowFilterModel.waitingOnly"
+                [disabled]="workflowFilterModel.processInstanceId !== undefined"
+                (onChange)="handleFilterChange()"
+            />
+            <label>Waiting instances</label>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.2rem">
+            <p-toggle-switch
+                [style]="{display: 'flex'}"
+                [(ngModel)]="workflowFilterModel.incidentsOnly"
+                [disabled]="workflowFilterModel.processInstanceId !== undefined"
+                (onChange)="handleFilterChange()"
+            />
+            <label>Incidents only</label>
+        </div>
+        <p-select
+            [options]="availableStates"
+            [(ngModel)]="workflowFilterModel.state"
+            [disabled]="workflowFilterModel.processInstanceId !== undefined"
+            (onChange)="handleFilterChange()"
+            placeholder="Select a state"
+            appendTo="body"
+        />
+        <div style="display: flex; gap: 0.5rem">
+            <div style="display: flex; gap: 0.2rem; align-items: center">
+                <label>From</label>
+                <p-datePicker
+                    inputId="fromDatePicker"
+                    appendTo="body"
+                    dateFormat="dd.MM.yy"
+                    hourFormat="24"
+                    [showTime]="true"
+                    [showButtonBar]="true"
+                    [(ngModel)]="fromDate"
+                    [disabled]="workflowFilterModel.processInstanceId !== undefined"
+                    (onSelect)="handleFilterChange()"
+                />
+            </div>
+
+            <div style="display: flex; gap: 0.2rem; align-items: center">
+                <label>To</label>
+                <p-datePicker
+                    appendTo="body"
+                    dateFormat="dd.MM.yy"
+                    hourFormat="24"
+                    [showTime]="true"
+                    [showButtonBar]="true"
+                    [(ngModel)]="toDate"
+                    [disabled]="workflowFilterModel.processInstanceId !== undefined"
+                    (onSelect)="handleFilterChange()"
+                />
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.2rem">
+            <p-toggle-switch
+                [style]="{display: 'flex'}"
+                [(ngModel)]="workflowFilterModel.showHistoricLabels"
+                (onChange)="handleFilterChange()"
+                [disabled]="workflowFilterModel.processInstanceId !== undefined"
+            />
+            <label>Show historic Labels</label>
+        </div>
+    </div>
+</p-panel>

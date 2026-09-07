@@ -1,0 +1,15 @@
+<p-panel>
+    <app-log-filter
+        [logFilter$]="this.logFilterService.filter$"
+        [logColumns$]="$logColumns()"
+        (handleSubmit)="handleSubmitFilter($event)"
+        [isWidget]="true"
+    />
+</p-panel>
+
+<app-log-table
+    [$logDataUpdate]="this.logService.logs$"
+    [$logColumns]="logColumns"
+    [isWidget]="true"
+    (handleLazyLoad)="this.handleLazyLoad($event)"
+/>

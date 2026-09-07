@@ -1,0 +1,88 @@
+@if (instances && instances.length > 0) {
+    <app-table
+        [columnTemplate]="customTableColumns"
+        [availableData]="instances"
+        [defaultColumnsOfTable]="columnsOfTable"
+        [paginationEnabled]="true"
+        [lazyEnabled]="false"
+        [menuHeaderEnabled]="true"
+        [defaultRows]="10"
+    >
+        <ng-template
+            let-entry="entryOfTable"
+            let-columns="columnsOfTable"
+            let-tableReference="tableReference"
+            #customTableColumns
+        >
+            <tr>
+                <td style="display: flex; gap: 0.3rem; align-items: center">
+                    <div>
+                        <p-menu
+                            #menu
+                            [model]="getWorkflowTableMenuItems(entry)"
+                            [popup]="true"
+                            [appendTo]="tableReference"
+                        >
+                            <ng-template #item let-item>
+                                <div
+                                    (click)="handleClickMenu(item, entry)"
+                                    class="flex items-center p-menu-item-link"
+                                >
+                                    <span [class]="item.icon"></span>
+                                    <span class="ml-2">{{ item.label }}</span>
+                                </div>
+                            </ng-template>
+                        </p-menu>
+                        <p-button size="small" (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
+                    </div>
+                </td>
+
+                @for (column of columns; track column.field) {
+                    @switch (column.field) {
+                        @case ('startTime') {
+                            <td>{{ entry[column.field] }}</td>
+                        }
+                        @case ('latestStartTime') {
+                            <td>{{ entry[column.field] }}</td>
+                        }
+                        @case ('latestEndTime') {
+                            <td>{{ entry[column.field] }}</td>
+                        }
+                        @case ('id') {
+                            <td>
+                                <app-workflow-filter-selection-group
+                                    [$workFlowFilterKey]="'processInstanceId'"
+                                    [$workFlowFilterElementSting]="entry[column.field] ?? undefined"
+                                />
+                            </td>
+                        }
+                        @case ('businessKey') {
+                            <td>
+                                <app-workflow-filter-selection-group
+                                    [$workFlowFilterKey]="'requestId'"
+                                    [$workFlowFilterElementSting]="entry[column.field] ?? undefined"
+                                />
+                            </td>
+                        }
+                        @case ('incidentMessage') {
+                            @if (
+                                (!entry[column.field] || entry[column.field] === '') &&
+                                entry.incidents &&
+                                entry.incidents.length > 0
+                            ) {
+                                <td>{{ entry?.incidents[0]['incidentType'] ?? '' }}</td>
+                            } @else {
+                                <td>{{ entry[column.field] }}</td>
+                            }
+                        }
+                        @default {
+                            <td>{{ entry[column.field] }}</td>
+                        }
+                    }
+                }
+            </tr>
+        </ng-template>
+    </app-table>
+} @else {
+    No instance data available
+}

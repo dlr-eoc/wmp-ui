@@ -1,0 +1,65 @@
+<div class="request-detail">
+    <div>
+        <h4>Request: {{ request().id }}</h4>
+    </div>
+    <div class="request-detail-data">
+        <div>
+            <div>Time: {{ request().creationDate.toISOString() }}</div>
+            <div>Type: {{ request().type }}</div>
+            <div>Status:{{ request().status }}</div>
+        </div>
+        <div class="request-command">
+            <p-floatlabel>
+                <input
+                    pInputText
+                    id="command_input"
+                    [(ngModel)]="command"
+                    autocomplete="off"
+                    (keydown.enter)="handleClick()"
+                />
+                <label for="command_input">Request command</label>
+            </p-floatlabel>
+            <p-button icon="pi pi-send" (onClick)="handleClick()" />
+        </div>
+
+        <p-accordion [value]="[]" [multiple]="true">
+            <p-accordion-panel value="attributes">
+                <p-accordion-header>Request Attributes</p-accordion-header>
+                <p-accordion-content style="margin: 0; padding: 0">
+                    @for (attribute of request().requestAttributes | keyvalue; track attribute.key) {
+                        <div class="request-raw-data-container">
+                            <p-divider layout="horizontal" />
+                            <div class="request-raw-data">
+                                @if (columns.indexOf(attribute.key) === -1) {
+                                    <p-button icon="pi pi-plus" (click)="addAttributeToTable(attribute)" />
+                                } @else {
+                                    <p-button icon="pi pi-check" (click)="removeAttribute(attribute)" />
+                                }
+                                <p>{{ attribute.key }}</p>
+                                <p>{{ attribute.value }}</p>
+                            </div>
+                        </div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="parameters">
+                <p-accordion-header>Parameters</p-accordion-header>
+                <p-accordion-content style="margin: 0; padding: 0">
+                    @for (parameter of request().parameters | keyvalue; track parameter.key) {
+                        <div class="request-raw-data-container">
+                            <p-divider layout="horizontal" />
+                            <div class="request-raw-data">
+                                <p></p>
+                                <p>{{ parameter.key }}</p>
+                                <p>{{ parameter.value }}</p>
+                            </div>
+                        </div>
+                    }
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    </div>
+    <div class="request-detail-pi">
+        <request-page-detail-process-instance />
+    </div>
+</div>

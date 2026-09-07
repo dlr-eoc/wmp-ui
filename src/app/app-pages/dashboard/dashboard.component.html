@@ -1,0 +1,24 @@
+<div class="dashboard-container">
+    <p-panel class="dashboard-chart-panel">
+        <div class="dashboard-chart">
+            <app-situation-dashboard
+                style="flex-grow: 1"
+                [bpmnHandlerService]="bpmnDiagramTicketHandlerService"
+            />
+            <!--            <div style="flex-grow: 3" class="dashboard-overview">-->
+            <!--                @if (bpmnDiagramHandlerService()) {-->
+            <!--                    <div class="bpmn-diagram">-->
+            <!--                        <app-bpmn-diagram-container [bpmnHandlerService]="bpmnDiagramHandlerService()" />-->
+            <!--                    </div>-->
+            <!--                }-->
+            <!--            </div>-->
+        </div>
+    </p-panel>
+    <p-panel>
+        <app-observer-tickets-panel [$bpmnManagerTicketProcessInstance]="_bpmnManagerTicketProcessInstance" />
+    </p-panel>
+
+    <!--    <p-panel>-->
+    <!--        <app-visual [configElement]="visualContainerConfig" />-->
+    <!--    </p-panel>-->
+</div>

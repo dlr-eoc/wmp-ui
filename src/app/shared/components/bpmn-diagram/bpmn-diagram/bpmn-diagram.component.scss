@@ -1,0 +1,28 @@
+@use 'src/styles.scss' as globalStyle;
+
+.diagram-container {
+    display: flex;
+    flex: 1;
+    width: 70vw;
+    min-width: 60vw;
+    max-width: 80vw;
+    height: globalStyle.$bpmn-diagram-height-default;
+    resize: both;
+    overflow: auto;
+}
+
+.diagram-loading-overlay {
+    @include globalStyle.bpmn-diagram-placeholder-style();
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    background: repeat scroll transparent\9;
+    z-index: 9999;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

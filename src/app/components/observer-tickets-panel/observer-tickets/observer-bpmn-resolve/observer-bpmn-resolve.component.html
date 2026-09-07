@@ -1,0 +1,44 @@
+<div class="bpmn-resolve-container">
+    <h3 style="margin-top: 0.2rem">{{ _$filter()?.processDefinition?.key }}</h3>
+    <div style="display: flex; align-items: center">
+        <p-button-group>
+            <p-button (onClick)="handleResolve()">Resolve</p-button>
+            <p-button
+                icon="pi pi-envelope"
+                variant="outlined"
+                pTooltip="Send Mail to supervisor."
+                (onClick)="this.handleClickSendToSupervisor()"
+            ></p-button>
+        </p-button-group>
+        @if (this.observerTicketsService.$incidents().length > 1) {
+            <p-divider layout="vertical" />
+            <p-button-group>
+                <p-button label="Restart Process Instance" icon="pi pi-refresh" />
+                @if (_$filter()?.activity) {
+                    <p-button variant="outlined" label="Retry Selected Activity" icon="pi pi-refresh" />
+                }
+            </p-button-group>
+        }
+        <p-divider layout="vertical" />
+        <p-button
+            label=""
+            icon="pi pi-eye"
+            pTooltip="View Process Definition"
+            (onClick)="this.handleViewProcessDefinition()"
+        />
+    </div>
+</div>
+<app-ticket-resolve-dialog
+    [visibleInput]="this.observerTicketsService.$visibleIncidentDialog"
+    title="Resolve"
+    description="Occured incidents: "
+    [incidents]="this.observerTicketsService.$incidents()"
+    (clickedConfirm)="this.observerTicketsService.resolveIncidents()"
+/>
+<app-bpmn-modal
+    [visibleInput]="this._$processDefinitionModelOpen"
+    title="View ProcessDefinition"
+    description=""
+    [bpmnManager]="this.bpmnManagerTicketProcessDefinition"
+    [workflowFilterToListen]="this._$bpmnHandlerServiceProcessInstance().workflowFilterService.filter$"
+/>

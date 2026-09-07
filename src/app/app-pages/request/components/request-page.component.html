@@ -1,0 +1,32 @@
+<div class="request-page-content">
+    <p-splitter [style]="{height: '100%'}" [panelSizes]="[75, 25]" [minSizes]="[25, 15]">
+        <ng-template #panel>
+            <div
+                style="
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    flex: 1;
+                    padding: 1rem;
+                    gap: 1rem;
+                "
+            >
+                <p-panel header="Request Filter" toggleable="false">
+                    <request-page-filter />
+                </p-panel>
+                <div style="overflow: auto; height: 100%">
+                    <app-request-page-table />
+                </div>
+            </div>
+        </ng-template>
+        <ng-template #panel>
+            <div style="width: 100%; padding: 1rem">
+                @if (selectedRequest) {
+                    <request-page-detail [request]="selectedRequest" />
+                } @else {
+                    <p-card header="Select a request"> </p-card>
+                }
+            </div>
+        </ng-template>
+    </p-splitter>
+</div>

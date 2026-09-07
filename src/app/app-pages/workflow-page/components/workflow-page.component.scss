@@ -1,0 +1,95 @@
+@use 'src/styles.scss' as globalStyle;
+
+.diagram-parent {
+    // border: solid 2px rgb(37, 37, 37);
+    position: relative;
+    height: 100%;
+}
+
+.import-error {
+    color: red;
+    padding: 20px;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+// .top {
+//   height: 50%;
+//   bottom: 0;
+//   background-color: aqua;
+//   overflow: auto;
+// }
+
+// .bottom {
+//   height: 50%;
+//   bottom: 0;
+//   background-color: pink;
+//   overflow-y: auto;
+// }
+
+.selected-row {
+    background-color: lightcoral;
+}
+
+.bpmn-placeholder {
+    @include globalStyle.bpmn-diagram-placeholder-style();
+}
+
+.bpmn-placeholder > img {
+}
+
+.workflow-page {
+    //width: 100%;
+    margin: 1rem;
+    width: calc(100vw - 2rem);
+    height: calc(100vh - #{globalStyle.$navigation-header-height} - 2rem);
+}
+.diagram-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.diagram-section .bpmn-detail {
+    padding: 1rem;
+}
+.diagram-section .bpmn-diagram {
+    @include globalStyle.bpmn-diagram-base-style();
+}
+
+// history form
+.date-time-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin-top: 0.5rem;
+}
+
+.date-container {
+    margin-left: 0.3rem;
+    min-width: 300px;
+}
+
+.date-input {
+    max-width: 100px;
+}
+
+.time-container {
+    margin-left: -2rem;
+}
+
+.time-input {
+    max-width: 75px;
+}
+
+.history-toggle-align {
+    padding-left: 0.8rem;
+}
+
+.history-toggle-label {
+    font-weight: bold;
+}

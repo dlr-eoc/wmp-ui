@@ -1,0 +1,42 @@
+<clr-tab-content>
+    <clr-datagrid [clrDgLoading]="(processInstanceJobLogsLoading | async) ?? true">
+        <clr-dg-column>Activity Name</clr-dg-column>
+        {{ processInstanceJobLogsLoading | async }}
+        <clr-dg-column [clrDgField]="'timestamp'" [clrDgSortOrder]="defaultSortOrder">
+            Create Time
+        </clr-dg-column>
+        <clr-dg-column>Log Type</clr-dg-column>
+        <clr-dg-column>Message</clr-dg-column>
+
+        <clr-dg-row
+            *clrDgItems="
+                let processInstanceJobLog of processInstanceJobLogs
+                    | async
+                    | fallback: []
+                    | JobLogFilter: activityName
+            "
+        >
+            <clr-dg-cell
+                >{{
+                    ((activityNameMap | async) ?? {})[processInstanceJobLog.activityId || ""] ||
+                        processInstanceJobLog.activityId
+                }}
+            </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceJobLog.timestamp }} </clr-dg-cell>
+            <clr-dg-cell>{{ getLogType(processInstanceJobLog) }}</clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceJobLog.jobExceptionMessage }} </clr-dg-cell>
+
+            @if (!!((stacktraceMap | async) ?? {})[processInstanceJobLog.id || ""]) {
+                <ng-container ngProjectAs="clr-dg-row-detail">
+                    <clr-dg-row-detail *clrIfExpanded>
+                        <div class="object-value-cell">
+                            {{ ((stacktraceMap | async) ?? {})[processInstanceJobLog.id || ""] }}
+                        </div>
+                    </clr-dg-row-detail>
+                </ng-container>
+            }
+        </clr-dg-row>
+
+        <clr-dg-footer> {{ ((processInstanceJobLogs | async) ?? []).length }} log entries </clr-dg-footer>
+    </clr-datagrid>
+</clr-tab-content>

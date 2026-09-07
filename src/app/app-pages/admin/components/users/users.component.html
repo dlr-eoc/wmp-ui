@@ -1,0 +1,103 @@
+<clr-datagrid (clrDgRefresh)="refresh($event)" [(clrDgSelected)]="selectedEntries" [clrDgLoading]="loading">
+    <clr-dg-action-bar>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-primary" (click)="updateUserList()">
+                <cds-icon shape="repeat"></cds-icon> Reload
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="addNewUser()">
+                <cds-icon shape="plus"></cds-icon> Create User
+            </button>
+            <button
+                type="button"
+                class="btn btn-sm btn-warning"
+                (click)="deleteSelectedUsers()"
+                [disabled]="!selectedEntries.length"
+            >
+                <cds-icon shape="trash"></cds-icon> Delete Users
+            </button>
+        </div>
+    </clr-dg-action-bar>
+    <clr-dg-column>Id</clr-dg-column>
+    <clr-dg-column
+        [clrDgField]="'firstName'"
+        [clrDgSortOrder]="currentSort === 'firstName' ? currentSortOrder : 0"
+        >First name</clr-dg-column
+    >
+    <clr-dg-column
+        [clrDgField]="'lastName'"
+        [clrDgSortOrder]="currentSort === 'lastName' ? currentSortOrder : 0"
+        >Last name</clr-dg-column
+    >
+    <clr-dg-column [clrDgField]="'email'" [clrDgSortOrder]="currentSort === 'email' ? currentSortOrder : 0"
+        >E-Mail</clr-dg-column
+    >
+
+    @for (user of tableEntries; track user) {
+        <clr-dg-row [clrDgItem]="user">
+            <clr-dg-action-overflow>
+                <button class="action-item" (click)="editUser(user)">Edit Profile</button>
+                <button class="action-item" (click)="manageGroups(user)">Manage groups</button>
+                <button class="action-item" (click)="deleteSingleUser(user)">Delete</button>
+            </clr-dg-action-overflow>
+
+            <clr-dg-cell>{{ user.id }}</clr-dg-cell>
+            <clr-dg-cell>{{ user.firstName }}</clr-dg-cell>
+            <clr-dg-cell>{{ user.lastName }}</clr-dg-cell>
+            <clr-dg-cell>{{ user.email }}</clr-dg-cell>
+        </clr-dg-row>
+    }
+
+    <clr-dg-footer>
+        <clr-dg-pagination
+            #pagination
+            [clrDgPage]="currentPage"
+            [clrDgPageSize]="currentPageSize"
+            [clrDgTotalItems]="totalEntries"
+        >
+            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">User per page</clr-dg-page-size>
+            {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of {{ totalEntries }} users
+        </clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+
+<!----------------------------------------------------------------------------->
+<!-- Modal dialogs                                                           -->
+<!----------------------------------------------------------------------------->
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="this.usersDeletionConfirmationModalOpen"
+    [dialogAdditionalContent]="additionalDialogContent"
+    title="Confirmation to delete user"
+    [description]=""
+    labelConfirm="Delete"
+    [flex]="false"
+    (clickedConfirm)="onConfirmUserDeletion(this.usersDeletionConfirmationEntries())"
+>
+    <ng-template #additionalDialogContent>
+        <p>Are you sure you want to delete the following users:</p>
+        <ul class="list">
+            @for (entry of this.usersDeletionConfirmationEntries(); track entry.id) {
+                <li>
+                    <b>{{ entry.id }}</b>
+                </li>
+            }
+        </ul>
+
+        <p><b>This process cannot be undone.</b></p>
+    </ng-template>
+</app-confirm-cancel-dialog>
+
+<!-- Add user dialog -->
+<app-add-user-modal [(open)]="addUserModalOpen" (openChange)="waitAndUpdateUserList()"></app-add-user-modal>
+
+<!-- Edit user dialog -->
+<app-edit-user-modal
+    [(open)]="editUserModalOpen"
+    (openChange)="waitAndUpdateUserList()"
+    [user]="editUserData"
+></app-edit-user-modal>
+
+<!-- Add user to group dialog -->
+<app-manage-groups-modal
+    [(open)]="manageGroupsModalOpen"
+    [data]="manageGroupsModalData"
+></app-manage-groups-modal>

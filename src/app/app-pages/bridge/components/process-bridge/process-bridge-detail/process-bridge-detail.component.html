@@ -1,0 +1,41 @@
+<div class="detail-container">
+    <div>
+        <h3 style="margin-top: 0">Bridge selection</h3>
+        <p-auto-complete
+            [(ngModel)]="selectedBridge"
+            [dropdown]="true"
+            [suggestions]="suggestionsBridges"
+            (onSelect)="handleBridgeChange($event)"
+            (completeMethod)="this.handeBridgeSearch($event)"
+            optionLabel="name"
+            placeholder="Please select a bridge..."
+            [style]="{width: '100%'}"
+        />
+    </div>
+    <div>
+        <h3 style="margin-top: 0">Model selection (BPMN)</h3>
+        <p-auto-complete
+            [(ngModel)]="selectedBridgeModel"
+            [dropdown]="true"
+            [suggestions]="suggestionsModels"
+            (onSelect)="handleBridgeModelChange($event)"
+            (completeMethod)="this.handeBridgeModelSearch($event)"
+            optionLabel="modelName"
+            placeholder="Please select a model..."
+            [style]="{width: '100%'}"
+        />
+    </div>
+    @if (selectedBridge) {
+        <div class="selected-container">
+            <h3 class="m-px">Settings</h3>
+            <div class="toggle-bridge">
+                <label>Bridge active: </label>
+                <p-toggleswitch
+                    [style]="{display: 'flex'}"
+                    [(ngModel)]="checked"
+                    (onChange)="handleChangeProcessBridgeActive($event)"
+                />
+            </div>
+        </div>
+    }
+</div>

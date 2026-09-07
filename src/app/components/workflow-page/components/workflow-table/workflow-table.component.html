@@ -1,0 +1,78 @@
+<app-table
+    [columnTemplate]="customTableColumns"
+    [totalAvailableCount]="totalAvailableCount"
+    [availableData]="availableProcessInstances"
+    [defaultColumnsOfTable]="columnsOfTable"
+    selectionMode="multiple"
+    (onLazyLoad)="handleLazyLoad($event)"
+    (onSelectionChanged)="handleSelectionChange($event)"
+>
+    <ng-template
+        let-entry="entryOfTable"
+        let-columns="columnsOfTable"
+        let-tableReference="tableReference"
+        #customTableColumns
+    >
+        <tr>
+            <td style="display: flex; gap: 0.3rem; align-items: center">
+                <p-tableCheckbox [value]="entry" />
+                <div>
+                    <p-menu
+                        #menu
+                        [model]="getWorkflowTableMenuItems(entry)"
+                        [popup]="true"
+                        [appendTo]="tableReference"
+                    >
+                        <ng-template #item let-item>
+                            <div
+                                (click)="handleClickMenu(item, entry)"
+                                class="flex items-center p-menu-item-link"
+                            >
+                                <span [class]="item.icon"></span>
+                                <span class="ml-2">{{ item.label }}</span>
+                            </div>
+                        </ng-template>
+                    </p-menu>
+                    <p-button size="small" (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
+                </div>
+            </td>
+
+            @for (column of columns; track column.field) {
+                @switch (column.field) {
+                    @case ('startTime') {
+                        <td>{{ entry[column.field] }}</td>
+                    }
+                    @case ('latestStartTime') {
+                        <td>{{ entry[column.field] }}</td>
+                    }
+                    @case ('latestEndTime') {
+                        <td>{{ entry[column.field] }}</td>
+                    }
+                    @case ('id') {
+                        <td>
+                            @if (entry[column.field]) {
+                                <app-workflow-filter-selection-group
+                                    [$workFlowFilterKey]="'processInstanceId'"
+                                    [$workFlowFilterElementSting]="entry[column.field]"
+                                />
+                            }
+                        </td>
+                    }
+                    @case ('businessKey') {
+                        <td>
+                            @if (entry[column.field]) {
+                                <app-workflow-filter-selection-group
+                                    [$workFlowFilterKey]="'requestId'"
+                                    [$workFlowFilterElementSting]="entry[column.field] ?? undefined"
+                                />
+                            }
+                        </td>
+                    }
+                    @default {
+                        <td>{{ entry[column.field] }}</td>
+                    }
+                }
+            }
+        </tr>
+    </ng-template>
+</app-table>

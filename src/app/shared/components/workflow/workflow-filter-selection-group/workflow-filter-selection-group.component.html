@@ -1,0 +1,37 @@
+@if (this.key) {
+    <div style="display: flex; gap: 0.2rem; flex-direction: column">
+        @if ($shouldDisplayText()) {
+            <div>
+                {{ this.$workFlowFilterElementSting() }}
+            </div>
+        }
+        <div style="display: flex; gap: 0.2rem">
+            @if (this.useInFilterSelectionType) {
+                <app-workflow-filter-selection
+                    [workFlowFilterElementSting]="elementString"
+                    [workFlowFilterKey]="this.key"
+                    [workflowFilterSelectionType]="this.useInFilterSelectionType"
+                />
+            }
+            <app-workflow-filter-selection
+                [workFlowFilterElementSting]="elementString"
+                [workFlowFilterKey]="this.key"
+                [workflowFilterSelectionType]="WorkflowFilterSelectionType.COPY_ELEMENT"
+            />
+            @if (isWorkflowPage && this.isRequestIdKey) {
+                <app-workflow-filter-selection
+                    [workFlowFilterElementSting]="elementString"
+                    [workFlowFilterKey]="this.key"
+                    [workflowFilterSelectionType]="WorkflowFilterSelectionType.NAVIGATE_TO"
+                />
+            } @else if (!isWorkflowPage) {
+                <!--            Case only non workflow pages helpful to navigation buttons (to workflow page)-->
+                <app-workflow-filter-selection
+                    [workFlowFilterElementSting]="elementString"
+                    [workFlowFilterKey]="this.key"
+                    [workflowFilterSelectionType]="WorkflowFilterSelectionType.NAVIGATE_TO"
+                />
+            }
+        </div>
+    </div>
+}

@@ -1,0 +1,123 @@
+<clr-stack-view>
+    <clr-stack-header>
+        Topic-Groups
+        <button class="stack-action btn btn-sm btn-link" (click)="onCreateNewTopicGroup()" type="button">
+            Create
+        </button>
+        <button class="stack-action btn btn-sm btn-link" (click)="onRefresh()" type="button">Refresh</button>
+        <button class="stack-action btn btn-sm btn-link" type="button" (click)="switchExpandableState()">
+            {{ expandableText }}
+        </button>
+    </clr-stack-header>
+
+    @for (topicGroup of topicGroups; track topicGroup) {
+        <clr-stack-block
+            [clrStackViewLevel]="1"
+            [(clrSbExpanded)]="topicGroup.expanded"
+            (clrSbExpandedChange)="updateSwitchLabel()"
+        >
+            <clr-stack-label>
+                <cds-icon shape="file-group"></cds-icon>
+                {{ topicGroup.name }}
+                <span class="light">({{ topicGroup.numWorkers }} worker(s), {{ topicGroup.execution }})</span>
+            </clr-stack-label>
+            <clr-stack-content class="flex">
+                <label (click)="onToggleChange($event, topicGroup)">
+                    <input type="checkbox" clrToggle [(ngModel)]="topicGroup.enabled" />
+                </label>
+                <div class="btn-group btn-primary btn-sm">
+                    <button (click)="onEdit($event, topicGroup)" class="btn">Edit</button>
+                    <button (click)="onDelete($event, topicGroup)" class="btn btn-danger">Delete</button>
+                </div>
+            </clr-stack-content>
+
+            @for (topic of topicGroup.topics; track topic) {
+                <clr-stack-block [clrStackViewLevel]="2">
+                    <clr-stack-label>
+                        <cds-icon shape="file"></cds-icon>
+                        {{ topic }}
+                    </clr-stack-label>
+                    <clr-stack-content>
+                        <div class="btn-group btn-outline-primary btn-sm">
+                            <button class="btn" (click)="changeGroup($event, topic)">Change Group</button>
+                        </div>
+                    </clr-stack-content>
+                </clr-stack-block>
+            }
+        </clr-stack-block>
+    }
+</clr-stack-view>
+<div class="separator"></div>
+@if (unassignedTopics.length > 0) {
+    <clr-stack-view>
+        <clr-stack-block [clrSbExpanded]="true" [clrStackViewLevel]="1">
+            <clr-stack-label>
+                <cds-icon shape="file-group"></cds-icon>
+                Unassigned topics
+            </clr-stack-label>
+            <clr-stack-content></clr-stack-content>
+            @for (topic of unassignedTopics; track topic) {
+                <clr-stack-block [clrStackViewLevel]="2">
+                    <clr-stack-label>
+                        <cds-icon shape="file"></cds-icon>
+                        {{ topic }}
+                    </clr-stack-label>
+                    <clr-stack-content>
+                        <div class="btn-group btn-outline-primary btn-sm">
+                            <button class="btn" (click)="changeGroup($event, topic)">Change Group</button>
+                        </div>
+                    </clr-stack-content>
+                </clr-stack-block>
+            }
+        </clr-stack-block>
+    </clr-stack-view>
+}
+
+<!----------------------------------------------------------------------------->
+<!-- Modal dialogs                                                           -->
+<!----------------------------------------------------------------------------->
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="this.topicGroupDeletionConfirmationModalOpen"
+    [dialogAdditionalContent]="additionalDialogContent"
+    title="Confirmation to delete topic group"
+    [description]=""
+    labelConfirm="Delete"
+    [flex]="false"
+    (clickedConfirm)="onConfirmedTopicGroupDeletion(topicGroupDeletionConfirmationModalEntry())"
+>
+    <ng-template #additionalDialogContent>
+        <p>
+            Are you sure you want to delete topic group <br />
+            <b> {{ topicGroupDeletionConfirmationModalEntry()?.name }} </b>?
+        </p>
+        <p><b>This process cannot be undone.</b></p>
+    </ng-template>
+</app-confirm-cancel-dialog>
+
+@if (addGroupModalData(); as value) {
+    <app-add-topic-group-modal
+        [(addModalOpen)]="addGroupModalOpen"
+        [addModalData]="value"
+        (openChange)="waitAndRefreshPage()"
+    ></app-add-topic-group-modal>
+}
+
+@if (editGroupModalData(); as value) {
+    <app-edit-topic-group-modal
+        [(editModalOpen)]="editGroupModalOpen"
+        [editModalData]="value"
+        (openChange)="waitAndRefreshPage()"
+    ></app-edit-topic-group-modal>
+}
+
+<app-change-group-modal
+    [(open)]="changeGroupModalOpen"
+    [data]="changeGroupData"
+    (openChange)="waitAndRefreshPage()"
+></app-change-group-modal>
+
+<text-input-dialog
+    [dialogTextInputHandler]="textInputDialogHandler"
+    [title]="'Confirm change'"
+    [text]="'Please enter a reason for the change:'"
+/>

@@ -1,0 +1,120 @@
+<clr-datagrid [(clrDgSelected)]="selectedEntries" [clrDgLoading]="loading">
+    <clr-dg-action-bar>
+        <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-primary" (click)="updatePageData()">
+                <cds-icon shape="repeat"></cds-icon> Reload
+            </button>
+            <button type="button" class="btn btn-sm btn-secondary" (click)="addNewExecution()">
+                <cds-icon shape="plus"></cds-icon> Create Execution
+            </button>
+            <button
+                type="button"
+                class="btn btn-sm btn-warning"
+                (click)="deleteSelectedExecutions()"
+                [disabled]="!selectedEntries.length"
+            >
+                <cds-icon shape="trash"></cds-icon> Delete Executions
+            </button>
+        </div>
+    </clr-dg-action-bar>
+    <clr-dg-column [clrDgField]="'name'" [clrDgSortOrder]="currentSort === 'firstName' ? currentSortOrder : 0"
+        >Name</clr-dg-column
+    >
+    <clr-dg-column
+        [clrDgField]="'className'"
+        [clrDgSortOrder]="currentSort === 'firstName' ? currentSortOrder : 0"
+        >Class Name</clr-dg-column
+    >
+    <clr-dg-column
+        class="enabled-width"
+        [clrDgField]="'enabled'"
+        [clrDgSortOrder]="currentSort === 'lastName' ? currentSortOrder : 0"
+        >Enabled</clr-dg-column
+    >
+
+    @for (execution of tableEntries; track execution) {
+        <clr-dg-row [clrDgItem]="execution">
+            <clr-dg-action-overflow>
+                <button class="action-item" (click)="editExecution(execution)">Edit</button>
+                <button class="action-item" (click)="deleteSingleExecution(execution)">Delete</button>
+            </clr-dg-action-overflow>
+
+            <clr-dg-cell>{{ execution.name }}</clr-dg-cell>
+            <clr-dg-cell>{{ execution.className }}</clr-dg-cell>
+            <clr-dg-cell>{{ execution.enabled }}</clr-dg-cell>
+            @if ((execution.additionalElements | json) != ({} | json)) {
+                <ng-container ngProjectAs="clr-dg-row-detail">
+                    <clr-dg-row-detail *clrIfExpanded>
+                        <div class="object-value-cell">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Key</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (element of execution.additionalElements | keyvalue; track element) {
+                                        <tr>
+                                            <td>{{ element.key }}</td>
+                                            <td>{{ element.value }}</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </clr-dg-row-detail>
+                </ng-container>
+            }
+        </clr-dg-row>
+    }
+
+    <clr-dg-footer>
+        <clr-dg-pagination
+            #pagination
+            [clrDgPage]="currentPage"
+            [clrDgPageSize]="currentPageSize"
+            [clrDgTotalItems]="totalEntries"
+        >
+            <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Executions per page</clr-dg-page-size>
+            {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} of {{ totalEntries }} executions
+        </clr-dg-pagination>
+    </clr-dg-footer>
+</clr-datagrid>
+
+<!----------------------------------------------------------------------------->
+<!-- Modal dialogs                                                           -->
+<!----------------------------------------------------------------------------->
+<app-confirm-cancel-dialog
+    [visibleInputSignal]="this.executionsDeletionConfirmationModalOpen"
+    [dialogAdditionalContent]="additionalDialogContent"
+    title="Confirmation to delete execution(s)"
+    [description]=""
+    labelConfirm="Delete"
+    [flex]="false"
+    (clickedConfirm)="onConfirmExecutionDeletion(this.executionsDeletionConfirmationEntries())"
+>
+    <ng-template #additionalDialogContent>
+        <p>Are you sure you want to delete the following execution(s):</p>
+        <ul class="list">
+            @for (entry of this.executionsDeletionConfirmationEntries(); track entry.name) {
+                <li>
+                    <b>{{ entry.name }}</b>
+                </li>
+            }
+        </ul>
+
+        <p><b>This process cannot be undone.</b></p>
+    </ng-template>
+</app-confirm-cancel-dialog>
+
+<app-add-execution-modal
+    [(open)]="addExecutionModalOpen"
+    (openChange)="waitAndRefreshPage()"
+></app-add-execution-modal>
+
+<app-edit-execution-modal
+    [(open)]="editExecutionModalOpen"
+    [data]="editExecutionModalData"
+    (openChange)="waitAndRefreshPage()"
+></app-edit-execution-modal>

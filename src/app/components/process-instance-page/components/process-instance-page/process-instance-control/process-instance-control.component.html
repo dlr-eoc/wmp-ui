@@ -1,0 +1,85 @@
+<div
+    style="
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        padding-bottom: 1rem;
+        padding-top: 1rem;
+    "
+>
+    <clr-dg-action-bar style="margin: 0">
+        <div class="btn-group">
+            <button class="btn btn-sm btn-primary" title="Reload Data" (click)="onButtonClick()">
+                <cds-icon shape="refresh"></cds-icon>
+                Reload
+            </button>
+            @if (processInstanceSuspended && (processWithIncidents?.incidents?.length ?? 0) > 0) {
+                <button
+                    class="btn btn-sm btn-secondary"
+                    title="Retry process instance"
+                    (click)="unsuspendProcessInstance()"
+                    [disabled]="processInstanceTerminated"
+                >
+                    <cds-icon shape="repeat"></cds-icon>
+                    Retry
+                </button>
+            }
+            @if (processInstanceSuspended && !((processWithIncidents?.incidents?.length ?? 0) > 0)) {
+                <button
+                    class="btn btn-sm btn-secondary"
+                    title="Unsuspend process instance"
+                    (click)="unsuspendProcessInstance()"
+                    [disabled]="processInstanceTerminated"
+                >
+                    <cds-icon shape="play"></cds-icon>
+                    Unsuspend
+                </button>
+            }
+            @if (!processInstanceSuspended) {
+                <button
+                    class="btn btn-sm btn-secondary"
+                    title="Suspend process instance"
+                    (click)="suspendProcessInstance()"
+                    [disabled]="processInstanceTerminated"
+                >
+                    <cds-icon shape="pause"></cds-icon>
+                    Suspend
+                </button>
+            }
+
+            <button
+                class="btn btn-sm btn-warning"
+                title="Terminate process instance"
+                (click)="openDeleteModal()"
+                [disabled]="processInstanceTerminated"
+            >
+                <cds-icon shape="stop"></cds-icon>
+                Terminate
+            </button>
+        </div>
+    </clr-dg-action-bar>
+    <div></div>
+</div>
+
+<!--<div [ngStyle]="{'margin-right':'1rem'}">-->
+<!--    Executions: {{ countExecutions }}-->
+<!--</div>-->
+<clr-modal [(clrModalOpen)]="terminateModalOpen">
+    <h3 class="modal-title">Terminate process</h3>
+    <div class="modal-body">
+        <p>
+            Are you sure you want to terminate the process with ID: <br /><b>{{ processInstance()?.id }}</b> ?
+        </p>
+        <p>This process cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline" (click)="closeDeleteModal()">Cancel</button>
+        <button type="button" class="btn btn-warning" (click)="deleteProcessInstance()">Terminate!</button>
+    </div>
+</clr-modal>
+<confirm-dialog
+    [text]="'Please confirm to restart ' + (incidents | async | fallback: [] | length) + ' jobs'"
+    [title]="'Restart'"
+    [dialogConfirmationHandler]="incidentConfirmDialog"
+/>

@@ -1,0 +1,21 @@
+<div class="request-table-filter">
+    <p-floatlabel>
+        <input
+            pInputText
+            id="search_id_input"
+            [(ngModel)]="searchID"
+            autocomplete="off"
+            (keydown.enter)="submit()"
+        />
+        <label for="search_id_input">Request ID: </label>
+    </p-floatlabel>
+    <p-autocomplete
+        [(ngModel)]="selectedStatus"
+        [dropdown]="true"
+        [suggestions]="currentStatusTypesSelectable"
+        (completeMethod)="searchForType($event)"
+    ></p-autocomplete>
+    <p-button icon="pi pi-times" (onClick)="resetForm()" />
+    <p-button icon="pi pi-search" label="Search" (onClick)="submit()" />
+    <p-button label="Reset Table Columns" (onClick)="resetTableColumns()" />
+</div>

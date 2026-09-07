@@ -1,0 +1,46 @@
+<p-splitter [style]="{height: '100%'}" [panelSizes]="[70, 30]" [minSizes]="[25, 15]">
+    <ng-template #panel>
+        <div class="pb-configTable">
+            <app-table
+                [columnTemplate]="customTableColumns"
+                [availableData]="bridgeParameters"
+                [defaultColumnsOfTable]="columnsOfTable"
+                [paginationEnabled]="false"
+            >
+                <ng-template let-instance="entryOfTable" let-columns="columnsOfTable" #customTableColumns>
+                    <tr>
+                        @for (column of columns; track column.field) {
+                            @switch (column.field) {
+                                @default {
+                                    @if (column.customColumn) {
+                                        <td>{{ this.getFromRequestAttributes(column, instance) }}</td>
+                                    } @else {
+                                        <td>{{ instance[column.field] }}</td>
+                                    }
+                                }
+                            }
+                        }
+                    </tr>
+                </ng-template>
+            </app-table>
+        </div>
+    </ng-template>
+    <ng-template #panel>
+        <div class="pb-configTableSelector">
+            @for (attribute of config | keyvalue; track attribute.key) {
+                <div class="pb-config-data-container">
+                    <div class="pb-config-data">
+                        @if (bridgeParameterKeys.indexOf(attribute.key) === -1) {
+                            <p-button icon="pi pi-plus" (click)="addAttributeToTable(attribute)" />
+                        } @else {
+                            <p-button icon="pi pi-check" (click)="removeAttribute(attribute)" />
+                        }
+                        <div class="pb-config-data-element">{{ attribute.key }}</div>
+                        <div class="pb-config-data-element">{{ attribute.value }}</div>
+                    </div>
+                    <p-divider layout="horizontal" />
+                </div>
+            }
+        </div>
+    </ng-template>
+</p-splitter>

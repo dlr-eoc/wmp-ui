@@ -1,0 +1,37 @@
+<!--@if (routerItems.length > 0 || processNavigationElements.length > 0) {-->
+@if (processNavigationElements.length > 0) {
+    <div class="context-menu-label" pTooltip="Click to view">
+        <p-button icon="pi pi-compass" (click)="togglePopOver($event)" />
+    </div>
+
+    <p-popover #op>
+        <div class="context-menu-panel">
+            <!--            <h5>Router</h5>-->
+            <!--            <div class="router-navigation">-->
+            <!--                <p-breadcrumb [home]="routerHome" [model]="routerItems">-->
+            <!--                    <ng-template #item let-item>-->
+            <!--                        <div class="context-menu-link" (click)="navigate(item.url)">-->
+            <!--                            {{ item.label }}-->
+            <!--                        </div>-->
+            <!--                    </ng-template>-->
+            <!--                    <ng-template #separator> / </ng-template>-->
+            <!--                </p-breadcrumb>-->
+            <!--                <p-button pTooltip="Clear History" icon="pi pi-times" (click)="handleClearRouterHistory()" />-->
+            <!--            </div>-->
+            @if (piItems.length > 0) {
+                <h5>Process Instances</h5>
+                <div class="process-navigation">
+                    <p-breadcrumb [home]="piHome" [model]="piItems">
+                        <ng-template #item let-item style="flex-wrap: wrap">
+                            <div class="context-menu-link" (click)="navigate(item.url)">
+                                {{ item.label }}
+                            </div>
+                        </ng-template>
+                        <ng-template #separator> / </ng-template>
+                    </p-breadcrumb>
+                    <p-button pTooltip="Clear History" icon="pi pi-times" (click)="handleClearPiHistory()" />
+                </div>
+            }
+        </div>
+    </p-popover>
+}

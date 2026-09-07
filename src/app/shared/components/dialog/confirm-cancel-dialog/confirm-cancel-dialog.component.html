@@ -1,0 +1,28 @@
+<app-base-dialog
+    [visibleInputSignal]="visibleInputSignal()"
+    [title]="title()"
+    [dialogContentTemplate]="dialogContentTemplate"
+    [dialogFooterTemplate]="dialogFooterTemplate"
+    [flex]="true"
+    (onDialogShown)="this.onDialogShown.emit()"
+    (onDialogHide)="this.onDialogHide.emit()"
+>
+    <ng-template #dialogContentTemplate>
+        <span>{{ description() ?? '' }}</span>
+        <ng-container [ngTemplateOutlet]="dialogAdditionalContent()" />
+    </ng-template>
+    <ng-template #dialogFooterTemplate>
+        <p-button
+            label="Cancel"
+            [text]="true"
+            severity="secondary"
+            (click)="this.visibleInputSignal().set(false)"
+        />
+        <p-button
+            [label]="labelConfirm()"
+            [outlined]="true"
+            severity="secondary"
+            (click)="this.clickedConfirm.emit()"
+        />
+    </ng-template>
+</app-base-dialog>

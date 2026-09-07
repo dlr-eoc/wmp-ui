@@ -1,0 +1,37 @@
+services:
+  wmp-ui:
+    image: wmp-ui:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: wmp-ui
+      #    hostname: wmp-ui  # optional: If you set this then always add an entry with this name and another with the correct docker-hostname in extra_hosts which points to the docker-host ip. Required for CORBA init etc.
+      #    network_mode: host
+      #    extra_hosts:  # optional: define additional hosts
+      #      - "<host-full-name>:<host-ip>"   # optional
+      #      - "<host-short-name>:<host-ip>"  # optional
+      #      - "<some-app-name>:<host-ip>"    # optional
+    environment:
+      - API_URL=http://localhost:8080/
+      # - http_proxy   # optional
+      # - https_proxy  # optional
+      # - no_proxy     # optional
+      # - HOST=$HOSTNAME
+      # user definitions
+      # - UID=  # optional: set user id (id -u)
+      # - GID=  # optional: set group id (id -g)
+      # user: ${UID}:${GID}  # optional: set user in docker container to avoid permission issues with files of container
+    ports:
+      - '4201:80'
+#    volumes:
+#      - ./logs:/var/log/nginx:rw
+#      - ./config/config.json:/usr/share/nginx/html/assets/config.json:ro
+#      - ./config/default.conf:/etc/nginx/conf.d/default.conf:ro
+    # optional to be able to interact with console out (usually not required)
+    #    stdin_open: true # optional: operates like docker run -i
+    #    tty: true        # optional: operates like docker run -t
+    #    entrypoint: docker/entrypoint  # optional: runs with an alternative entrypoint. default is "/entrypoint.sh"
+    restart: unless-stopped  # optional: possible values: no, always, on-failure, unless-stopped
+
+#volumes:
+#    some-volume:

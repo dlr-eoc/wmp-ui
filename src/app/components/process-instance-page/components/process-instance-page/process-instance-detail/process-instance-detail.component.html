@@ -1,0 +1,137 @@
+<div class="process-instance-detail" style="overflow: auto">
+    @if (!taskSelected) {
+        <div class="detail-legend">
+            <div>Legend:</div>
+            <div class="detail-legend-activities" data-hidden="false">
+                <div
+                    class="detail-color"
+                    [ngStyle]="{
+                        border: strokeWith + 'px solid',
+                        'border-color': COLOR_COMPLETED,
+                        background: colorCompleted,
+                        'border-radius.px': taskBorderRadius,
+                    }"
+                >
+                    Completed
+                </div>
+                <div
+                    class="detail-color"
+                    [ngStyle]="{
+                        border: strokeWith + 'px solid',
+                        'border-color': COLOR_RUNNING,
+                        background: colorRunning,
+                        'border-radius.px': taskBorderRadius,
+                    }"
+                >
+                    Running
+                </div>
+                <div
+                    class="detail-color"
+                    [ngStyle]="{
+                        border: strokeWith + 'px solid',
+                        'border-color': COLOR_INCIDENT,
+                        background: colorIncident,
+                        'border-radius.px': taskBorderRadius,
+                    }"
+                >
+                    Incident
+                </div>
+                <!--            <div style="display:flex;flex-direction: row; flex-wrap: wrap;gap:1rem">-->
+                <!--                <div class="detail-color-number" [ngStyle]="{'background-color':colorIncident}">number failed</div>-->
+                <!--                <div class="detail-color-number" [ngStyle]="{'background-color':colorTotal}">number total runs</div>-->
+                <!--                <div class="detail-color-number" [ngStyle]="{'background-color':colorSuccessful}">number successful</div>-->
+                <!--            </div>-->
+            </div>
+        </div>
+    } @else if (taskSelected) {
+        <div class="task-detail">
+            <div
+                style="display: flex; flex-direction: row; align-items: center; gap: 0.5rem; flex-wrap: wrap"
+            >
+                @if (taskSelected) {
+                    <app-activity-control
+                        [processInstance]="_$processInstance()"
+                        [taskSelected]="taskSelected"
+                        [processInstanceIncidents]="processInstanceIncidents"
+                        (buttonClicked)="reloadPageAfterButtonClick() && reloadPageAfterButtonClick().next()"
+                    />
+                }
+            </div>
+
+            @if (currentSelectionActivityLog && currentSelectionActivityLog.durationInMillis) {
+                <div>Duration: {{ currentSelectionActivityLog.durationInMillis | millisecond }}</div>
+            }
+
+            <p-panel header="BPMN Information">
+                <div>Name: {{ taskSelected }}</div>
+                @if (_$externalTasksOfSelection() && _$externalTasksOfSelection().length > 0) {
+                    @for (task of _$externalTasksOfSelection(); track task.id) {
+                        <div style="display: flex; align-items: center; justify-content: center">
+                            <div>
+                                Topic: <code>{{ task.topicName }}</code>
+                            </div>
+
+                            <p-button
+                                severity="secondary"
+                                icon="pi   pi-copy"
+                                [cdkCopyToClipboard]="task.topicName ?? ''"
+                            />
+                        </div>
+                    }
+                }
+                @if (sequenceFlowSelected) {
+                    @if (sequenceFlowSelected.connectionElement?.businessObject?.conditionExpression?.body) {
+                        <div>
+                            Condition:
+                            {{
+                                sequenceFlowSelected.connectionElement?.businessObject?.conditionExpression
+                                    ?.body
+                            }}
+                        </div>
+                    } @else {
+                        <div>No condition defined</div>
+                    }
+                }
+                @if (taskSelected && durationActivity && durationActivity[taskSelected]) {
+                    <div>Timer Value: {{ durationActivity[taskSelected] }}</div>
+
+                    <!--            <div>Some Data</div>-->
+                }
+                @if (elementSelected) {
+                    <!--                    @for (-->
+                    <!--                        eventDefinition of elementSelected.element?.businessObject?.eventDefinitions;-->
+                    <!--                        track eventDefinition.id-->
+                    <!--                    ) {-->
+                    <!--                        <div>Definition: {{ eventDefinition.timeDuration?.body }}</div>-->
+                    <!--                    }-->
+                }
+            </p-panel>
+            <div [hidden]="!mostRecentIncident">
+                <clr-accordion>
+                    <clr-accordion-panel>
+                        <clr-accordion-title style="width: 100%">
+                            <div style="display: flex; justify-content: space-between; align-items: center">
+                                Most Recent Incident
+                            </div>
+                        </clr-accordion-title>
+                        <clr-accordion-content *clrIfExpanded>
+                            <div>
+                                <div>
+                                    <div>
+                                        Time:
+                                        {{ mostRecentIncident?.createTime }}
+                                    </div>
+                                    <div>Incident Type: {{ mostRecentIncident?.incidentType }}</div>
+                                    <div>
+                                        Message:<br />
+                                        {{ mostRecentIncident?.incidentMessage }}
+                                    </div>
+                                </div>
+                            </div>
+                        </clr-accordion-content>
+                    </clr-accordion-panel>
+                </clr-accordion>
+            </div>
+        </div>
+    }
+</div>

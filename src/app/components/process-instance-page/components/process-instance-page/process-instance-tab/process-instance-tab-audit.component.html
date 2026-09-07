@@ -1,0 +1,32 @@
+<clr-tab-content>
+    <clr-datagrid [clrDgLoading]="(processInstanceAuditLogsLoading | async) ?? true">
+        <clr-dg-column>Activity Name</clr-dg-column>
+        <clr-dg-column>Activity Type</clr-dg-column>
+        <clr-dg-column [clrDgField]="'startTime'" [clrDgSortOrder]="defaultSortOrder"
+            >Start Time
+        </clr-dg-column>
+        <clr-dg-column [clrDgField]="'endTime'">End Time</clr-dg-column>
+        <clr-dg-column>Duration</clr-dg-column>
+        <clr-dg-column>Canceled</clr-dg-column>
+
+        <clr-dg-row
+            *clrDgItems="
+                let processInstanceAuditLogEntry of processInstanceActivityLog
+                    | async
+                    | fallback: []
+                    | AuditLogFilter: activityName
+            "
+        >
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.activityName }} </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.activityType }} </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.startTime }} </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.endTime }} </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.durationInMillis | millisecond }} </clr-dg-cell>
+            <clr-dg-cell>{{ processInstanceAuditLogEntry.canceled }}</clr-dg-cell>
+        </clr-dg-row>
+
+        <clr-dg-footer>
+            {{ ((processInstanceActivityLog | async) ?? []).length }} audit log entries
+        </clr-dg-footer>
+    </clr-datagrid>
+</clr-tab-content>

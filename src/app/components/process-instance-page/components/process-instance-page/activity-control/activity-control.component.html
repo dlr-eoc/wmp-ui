@@ -1,0 +1,16 @@
+@if (taskIncidentOccurred && !processInstanceTerminated) {
+    <div style="display: flex; flex-direction: row; gap: 0.5rem; align-items: center">
+        <div style="display: flex; flex-direction: row; gap: 0.5rem">
+            @if (taskIncidentOccurred) {
+                <button
+                    class="btn btn-icon btn-primary"
+                    title="Retry selected Activity/Task"
+                    (click)="restartJobWithIncident()"
+                    [disabled]="processInstanceTerminated"
+                >
+                    <cds-icon shape="repeat"></cds-icon>
+                </button>
+            }
+        </div>
+    </div>
+}

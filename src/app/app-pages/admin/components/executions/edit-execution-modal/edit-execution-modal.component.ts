@@ -1,0 +1,139 @@
+//
+//   Copyright 2026 Deutsches Zentrum für Luft- und Raumfahrt e.V.
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+//
+
+import {Component, inject, Input, OnChanges, SimpleChanges, output} from "@angular/core";
+import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {ExecutionDto} from "src/app/shared/services/wmp-api/models/ExecutionDto";
+import {WmpApiService} from "src/app/shared/services/wmp-api/wmp-api.service";
+import {
+    ClrAlertModule,
+    ClrCheckboxModule,
+    ClrCommonFormsModule,
+    ClrDatagridModule,
+    ClrInputModule,
+    ClrModalModule,
+} from "@clr/angular";
+
+@Component({
+    selector: "app-edit-execution-modal",
+    templateUrl: "./edit-execution-modal.component.html",
+    styleUrls: ["./edit-execution-modal.component.scss"],
+    imports: [
+        ClrModalModule,
+        ClrAlertModule,
+        FormsModule,
+        ClrCommonFormsModule,
+        ReactiveFormsModule,
+        ClrInputModule,
+        ClrCheckboxModule,
+        ClrDatagridModule,
+    ],
+})
+export class EditExecutionModalComponent implements OnChanges {
+    private api = inject(WmpApiService);
+
+    @Input({required: true}) public open!: boolean;
+    @Input({required: true}) public data!: ExecutionDto;
+    public readonly openChange = output<boolean>();
+
+    additionalElements: AdditionalElement[] = [];
+    key: string = "";
+    value: string = "";
+
+    form = new FormGroup({
+        name: new FormControl("", Validators.required),
+        className: new FormControl("", Validators.required),
+        enabled: new FormControl(false, Validators.required),
+    });
+
+    alertText: string = "";
+    alertClosed: boolean = true;
+
+    ngOnChanges(changes: SimpleChanges) {
+        for (const propName in changes) {
+            if (propName === "data") {
+                this.form.setValue({
+                    name: this.data.name || "",
+                    className: this.data.className || "",
+                    enabled: this.data.enabled || false,
+                });
+
+                this.additionalElements = [];
+                if (this.data.additionalElements) {
+                    for (let entry of Object.entries(this.data.additionalElements)) {
+                        this.additionalElements.push({
+                            key: entry[0],
+                            value: entry[1] as string,
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    async onSubmit() {
+        if (this.form.invalid) {
+            this.form.markAsTouched();
+        } else {
+            let additionalElements = {} as any;
+            for (let element of this.additionalElements) {
+                let value: any = element.value;
+                if (element.value === "true") {
+                    value = true;
+                }
+                if (element.value === "false") {
+                    value = false;
+                }
+                if (!isNaN(+element.value)) {
+                    value = Number(value);
+                }
+
+                additionalElements[element.key] = value;
+            }
+
+            const newExecution: ExecutionDto = {
+                name: this.form.value.name,
+                className: this.form.value.className,
+                enabled: this.form.value.enabled,
+                additionalElements: additionalElements,
+            };
+
+            try {
+                await this.api.updateExecution(this.data.name || "", newExecution);
+                this.open = false;
+                this.openChange.emit(false);
+            } catch (e: any) {
+                this.alertText = e.error.message;
+                this.alertClosed = false;
+            }
+        }
+    }
+
+    addEntry() {
+        this.additionalElements.push({key: this.key, value: this.value});
+        this.key = "";
+        this.value = "";
+    }
+
+    deleteEntry(element: AdditionalElement) {
+        this.additionalElements = this.additionalElements.filter((e) => e.key !== element.key);
+    }
+}
+
+export interface AdditionalElement {
+    key: string;
+    value: string;
+}
